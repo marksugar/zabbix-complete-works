@@ -1,0 +1,67 @@
+UserParameter=nginx.status[*],/etc/zabbix/scripts/nginx_status.sh $1 $2
+
+#!/bin/bash
+# -------------------------------------------------------------------------------
+# Filename:    nginx-status.sh
+# Revision:    1.1
+# Date:        20160707
+# Author:      mark
+# Email:       usertzc@163.com
+# Website:     www.linuxea.com
+# -------------------------------------------------------------------------------
+# Notice
+# Apply zabbix version 2.4.x to 3.0.3 
+# Nginx Need to open nginx status modules
+#################################################################################
+HOST=`ip a|awk -F'[/ ]' '/global.*eno/{print $6}'`
+#HOST=`ifconfig eth0 |sed -n '/inet /{s/.*addr://;//;s/ .*//;p}'`
+PORT="81"
+/usr/bin/curl "http://$HOST:$PORT/nginx_status" > /tmp/nginx-status.txt 2>/dev/null
+FILE=/tmp/nginx_status.txt
+if [[ $# == 1 ]]; then
+        case $1 in
+        #当前处于打开状态的连接数
+        Active)
+                output=`awk '/Active/{print $NF}' $FILE`
+                echo $output
+        ;;
+        #共处理的链接，已经接受的链接
+        server)
+                output=`awk 'NR==3{print $1}' $FILE`
+                echo $output
+        ;;
+        #成功创建握手，已经处理的链接
+        accepts)
+                output=`awk 'NR==3{print $2}' $FILE`
+                echo $output
+        ;;
+        #已经处理的链接，共处理的请求书
+        handled)
+                output=`awk 'NR==3{print $3}' $FILE`
+                echo $output
+        ;;
+        #读取客户端的连接数，正处于接受请求状态的连接数
+        reading)
+                output=`awk 'NR==4{print $2}' $FILE`
+                echo $output
+        ;;
+        #相应数据到客户端的数量，请求已经接受完成，正处于处理请求或发送响应的过程的连接数
+        Writing)
+                output=`awk 'NR==4{print $4}' $FILE`
+                echo $output
+        ;;
+        #开启keep-alive的情况下，这个值等于active-(reading+writing),意思就是nginx已经处理完正在等候下一个请求指令的驻留链接
+        #保持链接模式，且处于活动状态的连接数
+        Waiting)
+                output=`awk 'NR==4{print $6}' $FILE`
+                echo $output
+        ;;
+        *)
+        echo "Usage:$0{Active|server|accepts|handled|reading|Writing|Waiting}"
+        ;;
+esac
+fi
+
+
+也可以添加到crontab -e
+*/1 * * * * /usr/bin/curl http://10.10.239.185:81/nginx_status  > /tmp/nginx_status.txt 2>/dev/null

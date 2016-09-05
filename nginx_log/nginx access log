@@ -1,0 +1,53 @@
+nginx access log
+
+
+nginx日志格式：
+|   log_format upstream2 '$remote_addr $remote_user [$time_local] "$request" $http_host'
+        '$body_bytes_sent "$http_referer" "$http_user_agent" $ssl_protocol $ssl_cipher'
+        '$request_time [$status] [$upstream_status] [$upstream_response_time] "$upstream_addr"'; 
+
+
+是指从Nginx向后端（php-cgi)建立连接开始到接受完数据然后关闭连接为止的时间。
+
+[root@RACK_Proxy_black_list /etc/zabbix/scripts]# cat nginx-log_analysis.py 
+#!/usr/bin/env python
+# -------------------------------------------------------------------------------
+# Filename:    nginx-log
+# Revision:    1.1
+# Date:        201608015
+# Author:      mark
+# Email:       usertzc@163.com
+# Website:     www.linuxea.com
+# -------------------------------------------------------------------------------
+# Notice
+# nginx auto Discovery access.log
+# log Auto Discovery 
+###############################################################################
+import os
+import json
+t=os.popen("""ls /data/wwwlogs |grep 'log$' """)
+logs = []
+for log in  t.readlines():
+        r = os.path.basename(log.strip())
+        logs += [{'{#LOGNAME}':r}]
+print json.dumps({'data':logs},sort_keys=True,indent=4,separators=(',',':'))
+
+
+
+#nginx log
+UserParameter=nginx_log,/etc/zabbix/scripts/nginx-log_analysis.py
+UserParameter=nginxDY10.1000[*],/usr/bin/tail -1000 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{if($$0 > 10) total+=1}END{print total}'
+UserParameter=nginxDY10.100[*],/usr/bin/tail -100 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{if($$0 > 10) total+=1}END{print total}'
+UserParameter=nginxDY10.50[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{if($$0 > 10) total+=1}END{print total}'
+UserParameter=nginxPJ.1000[*],/usr/bin/tail -1000 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{sum+=$$0}END{b=sum/1000;print b}'
+UserParameter=nginxPJ.100[*],/usr/bin/tail -100 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{sum+=$$0}END{b=sum/1000;print b}'
+UserParameter=nginxPJ.50[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'| awk '{sum+=$$0}END{b=sum/1000;print b}'
+UserParameter=nginx100.404[*],/usr/bin/tail -100 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 404|wc -l
+UserParameter=nginx50.404[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 404|wc -l
+UserParameter=nginx100.502[*],/usr/bin/tail -100 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 502|wc -l
+UserParameter=nginx100.301[*],/usr/bin/tail -100 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 301|wc -l
+UserParameter=nginx50.502[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 502|wc -l
+UserParameter=nginx50.301[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-2}{print $a}'|grep 301|wc -l
+UserParameter=nginxmax[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'|awk 'BEGIN {max = 0} {if ($$1>max) max=$$1 fi} END {print "Max=",max}'|awk '{print $$2}'
+UserParameter=nginxmin[*],/usr/bin/tail -50 /data/wwwlogs/$1 |awk '{a=NF-1}{print $a}' |awk -F'[' '{print $$2}'|awk -F']' '{print $$1}'|awk 'BEGIN {min = 1999999} {if ($$1<min) min=$$1 fi} END {print min}'
+

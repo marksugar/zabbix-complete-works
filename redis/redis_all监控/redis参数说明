@@ -1,0 +1,80 @@
+redis-cli -h 127.0.0.1 -p 6379 info|grep uptime_in_seconds|awk -F":" '{print $NF}'  //启动时间
+redis-cli -h 127.0.0.1 -p 6379 info|grep connected_clients|awk -F":" '{print $NF}'  //链接客户端
+redis-cli -h 127.0.0.1 -p 6379 info|grep client_longest_output_list|awk -F":" '{print $NF}'  //当前客户端连接的最大输出列表
+redis-cli -h 127.0.0.1 -p 6379 info|grep client_biggest_input_buf|awk -F":" '{print $NF}'  //当前客户端连接的最大输入buffer TODO
+redis-cli -h 127.0.0.1 -p 6379 info|grep blocked_clients|awk -F":" '{print $NF}'   //被阻塞的客户端数
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory|awk -F":" '{print $NF}'|awk 'NR==1' //使用内存，单位B
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory_human|awk -F":" '{print $NF}' //human read显示使用内存
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory_rss|awk -F":" '{print $NF}'  //系统给redis分配的内存（即常驻内存）
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory_peak|awk -F":" '{print $NF}'|awk 'NR==1' //内存使用的峰值大小
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory_peak_human|awk -F":" '{print $NF}'|awk 'NR==1'  //# human read显示内存使用峰值 k值
+redis-cli -h 127.0.0.1 -p 6379 info|grep used_memory_lua|awk -F":" '{print $NF}'  //lua引擎使用的内存
+redis-cli -h 127.0.0.1 -p 6379 info|grep mem_fragmentation_ratio|awk -F":" '{print $NF}'   
+//# used_memory_rss/used_memory比例，一般情况下，used_memory_rss略高于used_memory，当内存碎片较多时，则mem_fragmentation_ratio会较大，可以反映内存碎片是否很多
+#rdb
+redis-cli -h 127.0.0.1 -p 6379 info|grep rdb_changes_since_last_save|awk -F":" '{print $NF}'  //自上次dump后rdb的改动
+redis-cli -h 127.0.0.1 -p 6379 info|grep rdb_bgsave_in_progress|awk -F":" '{print $NF}'   //# 标识rdb save是否进行中
+redis-cli -h 127.0.0.1 -p 6379 info|grep rdb_last_save_time|awk -F":" '{print $NF}'   //# 上次save的时间戳
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "rdb_last_bgsave_status" | awk -F':' '{print $2}' | g
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "rdb_current_bgsave_time_sec" | awk -F':' '{print $2}'  //如果rdb save操作正在进行，则是所使用的时间
+#aof
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_enabled" | awk -F':' '{print $2}'   //# 是否开启aof，默认没开启
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_rewrite_scheduled" | awk -F':' '{print $2}'   //# 标识是否将要在rdb save操作结束后执行
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_last_rewrite_time_sec" | awk -F':' '{print $2}'   //# 上次rewrite操作使用的时间(单位s)
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_current_rewrite_time_sec" | awk -F':' '{print $2}'   //# 如果rewrite操作正在进行，则记录所使用的时间
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_last_bgrewrite_status" | awk -F':' '{print $2}' | grep -c ok   //# 标识是否将要在rdb save操作结束后执行 ok为1
+#aofinfo
+# 开启aof后增加的一些info信息
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_current_size" | awk -F':' '{print $2}'  //# aof当前大小
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_base_size" | awk -F':' '{print $2}'  //# aof上次启动或rewrite的大小
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_pending_rewrite" | awk -F':' '{print $2}'  //# 同上面的aof_rewrite_scheduled
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_buffer_length" | awk -F':' '{print $2}'  //# aof buffer的大小
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_rewrite_buffer_length" | awk -F':' '{print $2}'  //# aof rewrite buffer的大小
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_pending_bio_fsync" | awk -F':' '{print $2}'  //# 后台IO队列中等待fsync任务的个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "aof_delayed_fsync" | awk -F':' '{print $2}'  //# 延迟的fsync计数器 TODO
+#stats
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "rejected_connections" | awk -F':' '{print $2}'  # 因为最大客户端连接书限制，而导致被拒绝连接的个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "instantaneous_ops_per_sec" | awk -F':' '{print $2}'  # 每秒执行的命令个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "total_connections_received" | awk -F':' '{print $2}' # 自启动起连接过的总数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "total_commands_processed" | awk -F':' '{print $2}' # 自启动起运行命令的总数 
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "expired_keys" | awk -F':' '{print $2}'  # 自启动起过期的key的总数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "evicted_keys" | awk -F':' '{print $2}'  # 因为内存大小限制，而被驱逐出去的键的个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "keyspace_hits" | awk -F':' '{print $2}' # 在main dictionary(todo)中成功查到的key个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "keyspace_misses" | awk -F':' '{print $2}' # 在main dictionary(todo)中未查到的key的个数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "pubsub_channels" | awk -F':' '{print $2}'  # 发布/订阅频道数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "pubsub_patterns" | awk -F':' '{print $2}' # 发布/订阅模式数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "latest_fork_usec" | awk -F':' '{print $2}'  # 上次的fork操作使用的时间（单位ms）
+#slave
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "connected_slaves" | awk -F':' '{print $2}'  #链接的从库数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "master_link_status"|awk -F':' '{print $2}'|grep -c up  #master_link状态 o关闭，1开启
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "master_last_io_seconds_ago"|awk -F':' '{print $2}' #与master通信时间
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "master_sync_in_progress"|awk -F':' '{print $2}'  标识主redis正在同步到从redis
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "connected_slaves"|awk -F':' '{print $2}'  # slave的连接数
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "slave_priority"|awk -F':' '{print $2}'   # slave的优先级
+#cpu
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "used_cpu_user"|awk -F':' '{print $2}'  # redis server的user cpu使用率
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "used_cpu_sys"|awk -F':' '{print $2}'  # redis server的sys cpu使用率
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "used_cpu_sys_children"|awk -F':' '{print $2}'  # redis server的sys cpu使用率
+redis-cli -h 127.0.0.1 -p 6379 info|grep -w "used_cpu_user_children"|awk -F':' '{print $2}'  # 后台进程的user cpu使用率
+
+#db0:key
+ db0_key_Number)
+        result=$REDISPATH -h $HOST -P $PORT| grep -w "db0"| grep -w "$1" | grep -w "keys" | awk -F'=|,' '{print $2}'
+            echo $result 
+            ;
+ db0_expires)
+        result=$REDISPATH -h $HOST -P $PORT| grep -w "db0"| grep -w "$1" | grep -w "expires" | awk -F'=|,' '{print $4}'
+            echo $result 
+            ;
+ db0_avg_ttl)
+        result=$REDISPATH -h $HOST -P $PORT|grep -w "db0"| grep -w "$1" | grep -w "avg_ttl" | awk -F'=|,' '{print $6}'
+            echo $result 
+            ;
+          )
+
+
+下载地址http://mirrors.ds.com/diy-build/QPTS
+UserParameter=mysql.QPS,python /etc/zabbix/scripts/QPTS fpmmm password 127.0.0.1 QPS
+UserParameter=mysql.TPS,python /etc/zabbix/scripts/QPTS fpmmm password HostName TPS 
+
+

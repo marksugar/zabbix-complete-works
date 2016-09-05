@@ -1,0 +1,84 @@
+UserParameter=redis_port,/etc/zabbix/scripts/redis-port.py
+UserParameter=redis_info[*],/usr/bin/redis-cli -h 127.0.0.1 -p $1 info |awk -F':'  '/$2\>/{print $$2}'
+UserParameter=redis_hits[*],/etc/zabbix/scripts/redis_hits.sh $1 $2
+
+
+
+
+[root@c7-test scripts]# cat redis_hits.sh 
+#!/bin/bash
+# -------------------------------------------------------------------------------
+# Filename:    redis3.0.7
+# Revision:    1.1
+# Date:        20160707
+# Author:      mark
+# Email:       usertzc@163.com
+# Website:     www.linuxea.com
+# -------------------------------------------------------------------------------
+# Notice
+# redis Take hits
+# is scripts Take hits hits/(hits+misses)
+#################################################################################
+#REDISPORT=$1
+/usr/local/bin/redis-cli -h 127.0.0.1 -p $1 info > /tmp/redis-$1-info.txt
+hits=`awk -F ':' '/keyspace_hits/{print $2}' /tmp/redis-$1-info.txt`
+misses=`awk -F ':' '/keyspace_misses/{print $2}' /tmp/redis-$1-info.txt`
+a=$hits
+#a=14414110
+
+#b=3228654
+b=$misses
+c=`awk 'BEGIN{a=$a;b=$b;print '$a+$b'}'`
+awk 'BEGIN{c=$c;a=$a;print '$a/$c*100'}'
+#awk '{a[NR]=$2;b[NR]=$1;s+=$1}END{for (j=1;j<=NR;j++) printf "%s %.2f%\n",a[j],b[j]*100/s}'
+
+
+[root@c7-test scripts]# cat redis-port.py 
+#!/usr/bin/env python
+# -------------------------------------------------------------------------------
+# Filename:    redis3.0.7
+# Revision:    1.1
+# Date:        20160707
+# Author:      mark
+# Email:       usertzc@163.com
+# Website:     www.linuxea.com
+# -------------------------------------------------------------------------------
+# Notice
+# redis auto Discovery port
+# is scripts Use ps to view the output port after .json format 
+#################################################################################
+
+import os
+import json
+t=os.popen("""ps -ef|grep redis-server|grep -v grep|awk -F'(:| )+' '{print $13}' """)
+ports = []
+for port in  t.readlines():
+        r = os.path.basename(port.strip())
+        ports += [{'{#REDISPORT}':r}]
+print json.dumps({'data':ports},sort_keys=True,indent=4,separators=(',',':'))
+
+
+
+
+
+#!/usr/bin/env python
+# -------------------------------------------------------------------------------
+# Filename:    nginx-log
+# Revision:    1.1
+# Date:        201608015
+# Author:      mark
+# Email:       usertzc@163.com
+# Website:     www.linuxea.com
+# -------------------------------------------------------------------------------
+# Notice
+# nginx auto Discovery access.log
+# log Auto Discovery 
+###############################################################################
+import os
+import json
+t=os.popen("""ls /data/logs |grep 'log$' """)
+logs = []
+for log in  t.readlines():
+        r = os.path.basename(log.strip())
+        logs += [{'{#LOGNAME}':r}]
+print json.dumps({'data':logs},sort_keys=True,indent=4,separators=(',',':'))
