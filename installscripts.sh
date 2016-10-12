@@ -22,15 +22,13 @@ echo -e "[zabbix]\nname = Zabbix\nbaseurl = http://repo.zabbix.com/zabbix/3.0/rh
 yum -c /tmp/yum.conf install -y zabbix-agent zabbix-sender
 sed -ri "s/^(Server(Active)?=).*/\1${SERVER_IP}/" /etc/zabbix/zabbix_agentd.conf
 sed -ri "s/^(Hostname=).*/\1${HOSTNAME}/g" /etc/zabbix/zabbix_agentd.conf
-#sed -i 's/Hostname=Zabbix server/Hostname='$pcip'/' /etc/zabbix/zabbix_agentd.conf
-setenforce 0
 
 mkdir $jkph -p
-wget -P $jkph https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/fdisk/disk.pl
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/fdisk/disk.pl -o ${jkph}disk.pl
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/fdisk/disktcp.conf -o ${UserParameter1}disktcp.conf
 chmod 755 /etc/zabbix/scripts/disk.pl
-wget -P $UserParameter1 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/fdisk/disktcp.conf
 (crontab -l; echo -e "*/1 * * * * /usr/sbin/ss  -tan|awk 'NR>1{++S[\$1]}END{for (a in S) print a,S[a]}' > /tmp/tcp-status.txt\n*/1 * * * * /usr/sbin/ss -o state established '( dport = :http or sport = :http )' |grep -v Netid > /tmp/httpNUB.txt") | crontab -
-iptables -I INPUT 4 -s $zzabbix -p tcp --dport 10050 -j ACCEPT
+
 [ "${VERSION}" = "7" ] && { systemctl enable zabbix-agent.service && systemctl start zabbix-agent.service; }
 [ "${VERSION}" = "6" ] && { chkconfig zabbix-agent on && service zabbix-agent start; }
-tail /var/log/zabbix/zabbix_agentd.log 
+
