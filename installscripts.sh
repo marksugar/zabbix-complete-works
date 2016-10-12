@@ -6,7 +6,7 @@
 if [[ "$1" == "local" ]]; then
         pcip=${pcip:-$(ip addr | awk '$1=="inet" && $NF!="lo"{print $2;exit}'|sed -r 's/\/[0-9]{1,}//')}
 elif [[ "$1" == "net" ]]; then
-        pcip=${pcip:-$(curl -Lks curlip.me|awk 'NR==1{print $NF}')}
+        pcip=${pcip:-$(curl -Lks4 curlip.me|awk 'NR==1{print $NF}')}
 fi
 
 zzabbix=${zzabbix:-$2}
