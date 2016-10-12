@@ -11,3 +11,12 @@ You can visit the blog author [Linuxea](http://www.linuxea.com)
 
 ![](http://www.zabbix.com/img/3.0/whatsnew/zabbix-whats-new-3.0-dashboard.png)
 
+
+## installscripts.sh
+**local network**
+[root@LinuxEA ~]# bash bs.sh local 192.168.1.1
+internet
+[root@LinuxEA ~]# bash bs.sh net 10.10.123.123
+
+** scripts **
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/installscripts.sh|bash -s net 10.10.123.123
