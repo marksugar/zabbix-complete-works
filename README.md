@@ -16,9 +16,12 @@ You can visit the blog author [Linuxea](http://www.linuxea.com)
 **local network**
 
 [root@LinuxEA ~]# bash bs.sh local 192.168.1.1
-internet
+
+
+**internet**
+
 [root@LinuxEA ~]# bash bs.sh net 10.10.123.123
 
-** scripts **
+**scripts**
 
 curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix/master/installscripts.sh|bash -s net 10.10.123.123
