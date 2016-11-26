@@ -1,0 +1,4 @@
+#docker
+UserParameter=docker_status,/etc/zabbix/scripts/docker_name.py
+UserParameter=docker_server[*],/usr/bin/docker top "$1"|grep "$2"|grep -v root |wc -l
+UserParameter=docker_host[*],awk '/$2\>/{print $$2}' /tmp/."$1".txt
