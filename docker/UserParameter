@@ -1,3 +1,5 @@
+AllowRoot=1
+User=root
 #docker
 UserParameter=docker_status,/etc/zabbix/scripts/docker_name.py
 UserParameter=docker_server[*],/usr/bin/docker top "$1"|grep "$2"|grep -v root |wc -l
