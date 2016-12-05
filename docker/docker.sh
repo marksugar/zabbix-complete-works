@@ -7,4 +7,5 @@ curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-w
 chmod +x /etc/zabbix/scripts/docker*
 (crontab -l; echo -e "*/1 * * * * /usr/bin/sh /etc/zabbix/scripts/docker_host_status.sh") | crontab -
 curl -Lks https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/docker/UserParameter >> $jkpcig
+systemctl restart zabbix-agent.service
 #pcip=`ip addr | awk '$1=="inet" && $NF!="lo"{print $2;exit}'|sed -r 's/\/[0-9]{1,}//'`
