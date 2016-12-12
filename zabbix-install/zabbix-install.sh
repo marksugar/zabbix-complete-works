@@ -24,8 +24,8 @@ sed -ri "s/^(Server(Active)?=).*/\1${SERVER_IP}/" /etc/zabbix/zabbix_agentd.conf
 sed -ri "s/^(Hostname=).*/\1${HOSTNAME_ZBX}/g" /etc/zabbix/zabbix_agentd.conf
 
 mkdir $jkph -p
-curl -Lks4 https://raw.githubusercontent.com/xiaoyawl/centos_init/master/fdisk/disk.pl -o ${jkph}disk.pl
-curl -Lks4 https://raw.githubusercontent.com/xiaoyawl/centos_init/master/fdisk/disktcp.conf -o ${UserParameter1}disktcp.conf
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/fdisk/disk.pl -o ${jkph}disk.pl
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/fdisk/disktcp.conf -o ${UserParameter1}disktcp.conf
 chmod 755 /etc/zabbix/scripts/disk.pl
 (crontab -l; echo -e "*/1 * * * * /usr/sbin/ss  -tan|awk 'NR>1{++S[\$1]}END{for (a in S) print a,S[a]}' > /tmp/tcp-status.txt\n*/1 * * * * /usr/sbin/ss -o state established '( dport = :http or sport = :http )' |grep -v Netid > /tmp/httpNUB.txt") | crontab -
 
