@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-##author: murphy##
-##email: mola2333@gmail.com##
+##author:
+##email: 
 import os
 import sys
 import json
