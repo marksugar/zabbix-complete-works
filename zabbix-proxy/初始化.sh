@@ -11,5 +11,6 @@ sip=10.57.57.57
 ipar=`ip addr | awk '$1=="inet" && $NF!="lo"{print $2;exit}'|sed -r 's/\/[0-9]{1,}//'`
 zapa=/etc/zabbix/zabbix_agentd.conf
 sed -i "s@Server=127.0.0.1@Server=$sip@" $zapa
-sed -i "s@ServerActive=127.0.0.1@ServerActive=$sip@" $zapa
+#sed -i "s@ServerActive=127.0.0.1@ServerActive=$sip@" $zapa
 sed -i "s@Hostname=Zabbix server@Hostname=$ipar@" $zapa
+iptables -I  INPUT 5 -p tcp -m state --state NEW -m tcp -m multiport --dports 10050,10051,10052 -m comment --comment "zabbix" -j ACCEPT
