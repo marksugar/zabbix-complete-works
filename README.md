@@ -43,3 +43,10 @@ curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-w
 *4, init centos *
 
 curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/zabbix-install/centos-init.sh |bash 
+
+## proxy install
+```
+curl -LKs4 https://raw.githubusercontent.com/LinuxEA-Mark/docker-mariaDB/master/docker-mysql-create.sh|bash
+curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/docker-nginx-php-fpm/master/nginx-php.sh |bash
+curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/zabbix-proxy/install_proxy.sh |bash
+```
