@@ -41,14 +41,14 @@ Username      = fpmmm
 Password      = password
 MysqlHost     = 127.0.0.1
 MysqlPort     = 3306
-ZabbixServer  = 47.90.33.131
+ZabbixServer  = 
 Disabled      = false
 Modules       = process mysql myisam innodb master security galera server aria
 PidFile       = /data/mariadb/mysql.pid
-[DS-VM-Node127.cluster.com]          # This MUST match Hostname in Zabbix!
+[]          # This MUST match Hostname in Zabbix!
 Type          = mysqld
 Modules       = fpmmm server
-[DS-VM-Node127.cluster.com]          # This MUST match Hostname in Zabbix!
+[]          # This MUST match Hostname in Zabbix!
 Type          = mysqld
 MysqlPort     = 3306
 Modules       = process mysql myisam innodb master security galera server aria
