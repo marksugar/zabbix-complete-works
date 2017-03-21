@@ -50,3 +50,6 @@ curl -LKs4 https://raw.githubusercontent.com/LinuxEA-Mark/docker-mariaDB/master
 curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/docker-nginx-php-fpm/master/nginx-php.sh |bash
 curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/zabbix-proxy/install_proxy.sh |bash
 ```
+
+## iptables监控
+```curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/iptables.sh|bash```
