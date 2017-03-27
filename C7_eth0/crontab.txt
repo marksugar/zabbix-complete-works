@@ -1,0 +1,9 @@
+echo UserParameter=eth0_input,awk '{print $1}' /tmp/eth0flow  >> /etc/zabbix/zabbix_agentd.conf
+UserParameter=eth0_output,awk '{print $2}' /tmp/eth0flow >> /etc/zabbix/zabbix_agentd.conf
+
+* * * * * sleep 10 && awk '/eth0/{print $2,$10}' /proc/net/dev > /tmp/eth0flow
+* * * * * sleep 20 && awk '/eth0/{print $2,$10}' /proc/net/dev > /tmp/eth0flow
+* * * * * sleep 30 && awk '/eth0/{print $2,$10}' /proc/net/dev > /tmp/eth0flow
+* * * * * sleep 40 && awk '/eth0/{print $2,$10}' /proc/net/dev > /tmp/eth0flow
+* * * * * sleep 50 && awk '/eth0/{print $2,$10}' /proc/net/dev > /tmp/eth0flow
+
