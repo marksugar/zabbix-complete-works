@@ -53,3 +53,7 @@ curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-wor
 
 ## iptables监控
 ```curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/iptables.sh|bash```
+
+## system optimization
+
+https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/sysctl-ulimit/sysctl-ulimit.cfg
