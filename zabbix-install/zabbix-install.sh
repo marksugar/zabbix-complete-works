@@ -28,7 +28,7 @@ curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-w
 curl -Lks4 https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/fdisk/disktcp.conf -o ${UserParameter1}disktcp.conf
 chmod 755 /etc/zabbix/scripts/disk.pl
 (crontab -l; echo -e "*/1 * * * * /usr/sbin/ss  -tan|awk 'NR>1{++S[\$1]}END{for (a in S) print a,S[a]}' > /tmp/tcp-status.txt\n*/1 * * * * /usr/sbin/ss -o state established '( dport = :http or sport = :http )' |grep -v Netid > /tmp/httpNUB.txt") | crontab -
-echo "UserParameter=iptables_lins,/usr/bin/sudo iptables -S |md5sum|awk '{print $1}'" >> /etc/zabbix/zabbix_agentd.conf && \
+echo "UserParameter=iptables_lins,/usr/bin/sudo iptables -S |md5sum|awk '{print \$1}'" >> /etc/zabbix/zabbix_agentd.conf && \
 echo 'zabbix ALL=(root)NOPASSWD:/usr/sbin/iptables,/usr/bin/cksum /etc/sysconfig/iptables' >>/etc/sudoers &&\
 echo 'UserParameter=iptables_file,/usr/bin/sudo /usr/bin/cksum /etc/sysconfig/iptables'  >>/etc/zabbix/zabbix_agentd.conf && \
 sed -i 's/Defaults    requiretty/#Defaults    requiretty/g' /etc/sudoers && cat /etc/sudoers|grep Defaults && \
