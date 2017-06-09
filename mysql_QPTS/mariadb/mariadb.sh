@@ -7,23 +7,23 @@ if [ $# -ne "$ARGS" ];then
 fi 
 case $1 in 
         Com_update) 
-                result=`${MYSQL} $DEF extended-status |awk '/Com_update\W/{print $4}'`
-                echo $result 
-                ;; 
+        result=`${MYSQL} $DEF extended-status |awk '/Com_update\W/{print $4}'`
+        echo $result 
+        ;; 
         Slow_queries) 
-                result=`${MYSQL} $DEF extended-status |awk '/Slow_queries/{print $4}'`
-                echo $result 
+        result=`${MYSQL} $DEF extended-status |awk '/Slow_queries/{print $4}'`
+        echo $result 
         ;; 
         com_select) 
-                result=`${MYSQL} $DEF extended-status |awk '/Com_select\W/{print $4}'`
-                echo $result 
+        result=`${MYSQL} $DEF extended-status |awk '/Com_select\W/{print $4}'`
+        echo $result 
         ;;               
         Com_insert) 
-                result=`${MYSQL} $DEF extended-status |awk '/Com_insert\W/{print $4}'`
+        result=`${MYSQL} $DEF extended-status |awk '/Com_insert\W/{print $4}'`
         echo $result 
         ;; 
         Com_delete) 
-                result=`${MYSQL} $DEF extended-status |awk '/Com_delete\W/{print $4}'`
+        result=`${MYSQL} $DEF extended-status |awk '/Com_delete\W/{print $4}'`
         echo $result 
         ;; 
 #查询的数量                      
