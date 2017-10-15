@@ -4,3 +4,6 @@ curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-wor
 
 `GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1'  IDENTIFIED BY 'password';`
 
+* UserParameter
+
+`echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf`
