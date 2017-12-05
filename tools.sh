@@ -15,7 +15,8 @@ while read  -p '
 #		2, 查看CPU占用前10进程
 #		3, 查看内存资源损耗(dstat)
 #		4, 查看CPU资源损耗(dstat)
-#		A, 查看程序io的读写
+#		a, 查看程序io的读写
+#		A, 查看当前占用I/O、cpu、内存等最高的进程信息
 #		5, strace追踪
 #		6, 查看tcp链接状态
 #		7, 列出最多端口的端口号
@@ -49,8 +50,10 @@ Enter A Number:' ENZ;do
 	/usr/sbin/ss  -tan|awk 'NR>1{++S[$1]}END{for (a in S) print a,S[a]}';;
 	7)
 	ss -an | awk -F"[[:space:]]+|:" '{S[$5]++}END{for(i in S){print S[i]"\t"i}}' | sort -rn |head -n 10;;
+	a)
+	dstat --top-mem --top-io --top-cpu 1 5;;
 	A)
-	dstat -t -n --top-io 1 5;;
+	dstat -c --top-cpu -d --top-bio --top-latency 1 5;;
 	B)
 	read -p "请输入日志文件的绝对路径:" PAT
 	awk -F":" '$2 == hour {S[$3]++}END{for(i in S){print i"\t"S[i]}}' hour=`date +%H` ${PAT} |sort -n;;
