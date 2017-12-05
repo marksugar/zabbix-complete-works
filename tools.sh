@@ -50,7 +50,7 @@ Enter A Number:' ENZ;do
 	7)
 	ss -an | awk -F"[[:space:]]+|:" '{S[$5]++}END{for(i in S){print S[i]"\t"i}}' | sort -rn |head -n 10;;
 	A)
-	dstat -t -n --top-io-adv 1 5;;
+	dstat -t -n --top-io 1 5;;
 	B)
 	read -p "请输入日志文件的绝对路径:" PAT
 	awk -F":" '$2 == hour {S[$3]++}END{for(i in S){print i"\t"S[i]}}' hour=`date +%H` ${PAT} |sort -n;;
