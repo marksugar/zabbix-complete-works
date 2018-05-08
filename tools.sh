@@ -56,8 +56,10 @@ Enter A Number:' ENZ;do
 	dstat -c --top-cpu -d --top-bio --top-latency 1 5;;
 	B)
 	read -p "请输入日志文件的绝对路径:" PAT
+	# 每小时的访问量
 	awk -F":" '$2 == hour {S[$3]++}END{for(i in S){print i"\t"S[i]}}' hour=`date +%H` ${PAT} |sort -n;;
 	C)
+ 	# 一小时每分钟访问量
 	read -p "请输入日志文件的绝对路径:" PATT
 	awk -F'"|:' '$2 == hour && $3 == min && /GET/ {S[$8]++}END{for(i in S){print S[i]"\t"i}}' hour=`date +%H` min=`date +%M`  ${PATT} |sort -rn;;
 	D)
