@@ -24,11 +24,11 @@ I believe you have already understood this script.
 
 Next, when you need to add itmes,
 
-[io-0.png](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-0.png)
+![io-0.png](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-0.png)
 
 Next, modify the rate. This is very important
 
-[io-1.png](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-1.png)
+![io-1.png](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-1.png)
 
 Finally it is probably like this
 
