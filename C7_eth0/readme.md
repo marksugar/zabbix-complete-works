@@ -32,4 +32,4 @@ Next, modify the rate. This is very important
 
 Finally it is probably like this
 
-[](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-3.png)
+![io-3.png](https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/C7_eth0/io-3.png)
