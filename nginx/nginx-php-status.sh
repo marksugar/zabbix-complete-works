@@ -15,5 +15,7 @@ if [ `grep php-fpm ${ZAPATH}|wc -l` = 0 ];then
   echo "UserParameter=php-fpm.status[*],/usr/bin/curl -s \"http://127.0.0.1:40080/php-fpm_status?xml\" | grep \"<\$1>\" | awk -F '>|<' '{ print \$\$3}'" >> ${ZAPATH}
 fi
 systemctl restart zabbix-agent
-ss -tlnp|grep 40080
+echo "tail -10 /var/log/zabbix/zabbix_agentd.log"
 tail -10 /var/log/zabbix/zabbix_agentd.log
+echo "sleep 2 && ss -tlnp|grep 40080"
+sleep 2 && ss -tlnp|grep 40080
