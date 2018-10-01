@@ -23,7 +23,7 @@ if [ `grep redis ${ZAPATH}|wc -l` = 0 ];then
 	echo "UserParameter=redis_hits,/usr/local/zabbix/scripts/redis_hits.sh" >> ${ZAPATH}
 fi
 
-(crontab -l; echo -e "*/1 * * * * /usr/bin/redis-cli -h 127.0.0.1 -p 6379 info > /tmp/redis-info.txt 2>/dev/null" ) | crontab -
+(crontab -l; echo -e "*/1 * * * * /usr/local/bin/redis-cli -h 127.0.0.1 -p 6379 info > /tmp/redis-info.txt 2>/dev/null" ) | crontab -
 
 systemctl restart zabbix-agent
 echo "tail -10 /var/log/zabbix/zabbix_agentd.log"
