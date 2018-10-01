@@ -27,3 +27,4 @@ fi
 
 systemctl restart zabbix-agent
 echo "tail -10 /var/log/zabbix/zabbix_agentd.log"
+tail -10 /var/log/zabbix/zabbix_agentd.log
