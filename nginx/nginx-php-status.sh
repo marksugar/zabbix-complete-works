@@ -8,7 +8,7 @@ NGSTATUS=/usr/local/nginx/conf/vhost/status.conf
 
 ZAPATH=/etc/zabbix/zabbix_agentd.conf
 if [ `grep nginx ${ZAPATH}|wc -l` = 0 ];then
-  echo "UserParameter=nginx.status[*],/usr/local/zabbix/scripts/nginx_status.sh \$1 \$2" >> ${ZAPATH}
+  echo "UserParameter=nginx.status[*],${NGFILE} \$1 \$2" >> ${ZAPATH}
 fi
   
 if [ `grep php-fpm ${ZAPATH}|wc -l` = 0 ];then
