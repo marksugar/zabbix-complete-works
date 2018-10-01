@@ -7,7 +7,7 @@ ZAPATHA=/etc/zabbix/scripts
 
 if [ `type redis-cli|wc -l` = 0 ];then
 	git clone http://github.com/antirez/redis.git "${REDISPATH}"
-	cd ${REDISPATH} && git checkout 3.0 && make redis-cli  && cp src/redis-cli /usr/local/bin \rm -rf ${REDISPATH}
+	cd ${REDISPATH} && git checkout 3.0 && make redis-cli  && cp src/redis-cli /usr/local/bin && \rm -rf ${REDISPATH} && echo `redis-cli --version`
 else
     	echo "redis-cli already exists!"
 	echo `redis-cli --version`
