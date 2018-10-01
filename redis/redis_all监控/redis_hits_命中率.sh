@@ -24,8 +24,6 @@ awk 'BEGIN{c=$c;a=$a;print '$a/$c'}'
 
 UserParameter=redis_hits,/usr/local/zabbix/scripts/redis_hits.sh
 
-
-*/1 * * * * 
 */1 * * * * /usr/sbin/ss  -tan|awk 'NR>1{++S[$1]}END{for (a in S) print a,S[a]}' > /tmp/tcp-status.txt
 */1 * * * * /usr/sbin/ss -o state established '( dport = :http or sport = :http )' |grep -v Netid > /tmp/httpNUB.txt
 
@@ -45,16 +43,6 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 
 UserParameter=redis_hits,/usr/local/zabbix/scripts/redis_hits.sh
 UserParameter=redis_info[*],/usr/local/zabbix/scripts/redis_info.sh $1 $2
-
--A INPUT -s 47.90.33.131/32 -p tcp -m state --state NEW -m multiport --dports 10050:10051 -j ACCEPT 
-
-
-iptables -D INPUT 58
-iptables -I INPUT 51 -s 47.90.33.131 -p tcp -m state --state NEW -m multiport --dports 10050:10051 -j ACCEPT 
-iptables -I INPUT 50 -s 47.90.33.131/32 -p tcp -m tcp --dport 10050:10051 -j ACCEPT 
-
-47.90.33.131
-
 
 
 
