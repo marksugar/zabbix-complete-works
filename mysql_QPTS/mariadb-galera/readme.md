@@ -1,3 +1,5 @@
+这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构
+
 curl -Lk https://raw.githubusercontent.com/LinuxEA-Mark/zabbix3.0.2-complete-works/master/mysql_QPTS/mariadb/install_db_status.sh|bash
 
 * sql

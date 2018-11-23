@@ -1,3 +1,5 @@
+note : I have deprecated
+
 This is a less appropriate NIC monitoring, you can try
 
 Coincidentally, I have several machines with different bandwidths and can't use zabbix's default discovery template.

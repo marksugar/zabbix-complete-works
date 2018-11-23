@@ -1,0 +1,1 @@
+主从监控参考文档： https://www.linuxea.com/1655.html#%E4%B8%BB%E4%BB%8E%E7%9B%91%E6%8E%A7
