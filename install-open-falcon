@@ -1,0 +1,47 @@
+https://github.com/open-falcon/falcon-plus/releases/download/v0.2.1/open-falcon-v0.2.1.tar.gz
+
+
+GRANT ALL ON `alarms`.* TO `openfalcon`@'%' IDENTIFIED BY 'openfalcon';
+GRANT ALL ON `dashboard`.* TO `openfalcon`@'%' IDENTIFIED BY 'openfalcon';
+GRANT ALL ON `falcon_portal`.* TO `openfalcon`@'%' IDENTIFIED BY 'openfalcon';
+GRANT ALL ON `graph`.* TO `openfalcon`@'%' IDENTIFIED BY 'openfalcon';
+GRANT ALL ON `uic`.* TO `openfalcon`@'%' IDENTIFIED BY 'openfalcon';
+
+
+
+grep -Ilr 3306  ./ | xargs -n1 -- sed -i 's/real_user:real_password/openfalcon:openfalcon/g'
+
+
+
+[root@DT_Node-172_25_250_249 /data/open-falcon]# ./open-falcon check
+        falcon-graph         UP           32227 
+          falcon-hbs         UP           32243 
+        falcon-judge         UP           32257 
+     falcon-transfer         UP           32269 
+       falcon-nodata         UP           32280 
+   falcon-aggregator         UP           32291 
+        falcon-agent         UP           32305 
+      falcon-gateway         UP           32317 
+          falcon-api         UP           32328 
+        falcon-alarm         UP           32340 
+
+		
+ansible all -m unarchive -a 'src=~/open-falcon-v0.2.1.tar.gz dest=/usr/local/open-falcon copy=yes mode=0755'
+
+ansible all -m unarchive -a 'src=~/open-falcon-v0.2.1.tar.gz dest=/usr/local/open-falcon copy=yes mode=0755'
+
+
+cat > $PWD/installgo.sh << EOF
+#!/bin/bash
+curl -Lk http://10.10.240.145/golang/go1.11.2.linux-amd64.tar.gz|tar xz -C /usr/local
+ln -s /usr/local/go/bin/go  /usr/local/bin/go
+EOF
+
+ansible all -m script  -a "installgo.sh"
+
+ansible all -m script  -a "iptables -I INPUT 5 -p tcp --dport 1988 -j ACCEPT"
+
+ansible all -m shell -a "cd /usr/local/open-falcon && nohup ./open-falcon start agent"
+
+
+/usr/local/open-falcon/agent/config/cfg.json
