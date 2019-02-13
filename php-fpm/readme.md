@@ -1,6 +1,7 @@
-ÕâÀïÒÀ¾ÉÌá¹©ÁËphpºÍnginxÒ»ÑùµÄ¼à¿Ø·½Ê½
+è¿™é‡Œä¾æ—§æä¾›äº†phpå’Œnginxä¸€æ ·çš„ç›‘æ§æ–¹å¼
 
-²»Í¬µÄÊÇphp²¢²»ĞèÒª½Å±¾£¬Ö»ĞèÒªÄ£°åºÍÅäÖÃÎÄ¼şµÄ¶¨Òå¼´¿É½øĞĞ»ñÈ¡
-
+ä¸åŒçš„æ˜¯phpå¹¶ä¸éœ€è¦è„šæœ¬ï¼Œåªéœ€è¦æ¨¡æ¿å’Œé…ç½®æ–‡ä»¶çš„å®šä¹‰å³å¯è¿›è¡Œè·å–
+```
 UserParameter=nginx.status[*],/etc/zabbix/scripts/nginx_status.sh $1 $2
 UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm_status?xml" | grep "<$1>" | awk -F'>|<' '{ print $$3}'
+```
