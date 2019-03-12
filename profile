@@ -86,4 +86,5 @@ PS1='🌟 \[\033[1;33m\u\[\033[1;31m\]@\h 🎁 \[\033[1;32m\]\w 🎄 \[\033[1;36
 #PS1="\[$(tput bold; tput setaf 2)\]\s\[$(tput sgr0)\] \$"
 #PS1="🎄\s \W \$ "
 #PS1='[\[\033[0;34m\]\u\[\033[0;37m\]@\[\033[0;35m\]DT_Node-${NodeID}\[\033[0;33m\] \w\[\033[0;37m\]]\[\033[0;31m\]\$\[\033[00m\] '
+#PS1='🌟 \033[34m🐳\[\033[1;33m\u\[\033[1;31m\]@\h \033[34m🐳 \[\033[1;32m\]\w ☸ 🎄  \[\033[1;36m\]\[\033[0;37m\] `date +%F" "%T` \n\[\033[1;37m\]$ \[\033[0m\]'
 export PROMPT_COMMAND='{ msg=$(history 1 | { read x y; echo $y; });user=$(whoami); echo $(date "+%F %H:%M:%S"):$user:`pwd`:$msg ---- $(who am i); } >> /tmp/`date "+%F"`.`hostname`.`whoami`.history-timestamp'
