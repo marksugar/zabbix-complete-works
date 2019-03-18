@@ -1,10 +1,21 @@
-> 20190318 
+*note*
 
-保留了一些好的用法，在我看来。这些当中包括：
+你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
-[TOC]
+* [authorized_keys](#authorized_keys)
+* [iptables](#iptables)
+* [磁盘io](#磁盘io)
+* [nginx和php-fpm](#nginx和php-fpm)
+* [tcp](#tcp)
+* [mariadb-galera](#mariadb-galera)
 
+我在最新的agentd安装脚本中，使用的4.0版本。
 
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local IPADDR
+```
+
+> 你需要指定server ip，`base  -s local IPADDR`
 
 ## authorized_keys
 
@@ -22,6 +33,12 @@ UserParameter=authorized_keys,sudo /usr/bin/cksum /root/.ssh/authorized_keys|awk
 ```
 
 如果你有好点子，你可以修改
+
+items配置如下
+
+![auth1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth1.png)
+- Trigger
+![auth2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth2.png)
 
 ## iptables
 
