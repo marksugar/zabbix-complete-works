@@ -1,1 +1,0 @@
-nginx and php status
