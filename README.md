@@ -57,7 +57,8 @@ UserParameter=iptables_file,/usr/bin/sudo /usr/bin/cksum /etc/sysconfig/iptables
 ```
 zabbix ALL=(root)NOPASSWD:/usr/sbin/iptables,/usr/bin/cksum /etc/sysconfig/iptables
 ```
-
+![iptables1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables1.png)
+![iptables2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables2.png)
 ## 磁盘io
 
 在这里下载perl脚本。并且要给755权限
@@ -73,6 +74,10 @@ UserParameter=custom.vfs.dev.write.ops[*],cat /proc/diskstats | grep $1 | head -
 UserParameter=custom.vfs.dev.read.ms[*],cat /proc/diskstats | grep $1 | head -1 | awk '{print $$7}'
 UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1 | awk '{print $$11}'
 ```
+
+这个是一个自动发现做的
+![disl1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk1.png)
+![disk2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk2.png)
 
 ## nginx和php-fpm
 
@@ -106,7 +111,11 @@ php就更简单了，直接访问抓取即可
 UserParameter=nginx.status[*],/etc/zabbix/scripts/nginx_status.sh $1 $2
 UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm_status?xml" | grep "<$1>" | awk -F'>|<' '{ print $$3}'
 ```
-
+![nginx1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx1.png)
+![nginx2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx2.png)
+- php-fpm
+![php-fpm1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/php1.png)
+![php2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/php2.png)
 ## tcp
 
 我用了一种简单的方式来进行监控，在我看来越简单越好用。
@@ -122,7 +131,8 @@ UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm
 UserParameter=tcp.status[*],awk '{if ($$1~/^$1/)print $$2}' /tmp/tcp-status.txt
 UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 ```
-
+![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp1.png)
+![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp2.png)
 ## mariadb-galera
 
 这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构
@@ -138,4 +148,5 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 ```
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
-
+![mariadb-gra](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra1.png)
+![mariadb-gra2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra2.png)
