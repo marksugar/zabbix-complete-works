@@ -14,7 +14,7 @@
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
-我在最新的agentd安装脚本中，使用的4.0版本。
+我在最新的agentd安装脚本中，使用的4.0版本，在这个脚本的包中包含如上的几种基础监控项目。
 
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local IPADDR
