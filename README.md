@@ -1,5 +1,5 @@
 
-![zabbix](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/zabbix.png)   Zabbix4.0
+![zabbix](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/zabbixx.png)
 
 *note*
 
