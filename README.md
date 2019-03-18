@@ -12,6 +12,8 @@
 * [tcp](#tcp)
 * [mariadb-galera](#mariadb-galera)
 
+***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
+
 我在最新的agentd安装脚本中，使用的4.0版本。
 
 ```
@@ -23,48 +25,49 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ## authorized_keys
 
 这需要sudo权限
-
 ```
 zabbix ALL=(root)NOPASSWD:/usr/bin/cksum /root/.ssh/authorized_keys
 zabbix ALL=(root)NOPASSWD:/usr/bin/awk
 ```
-
 而后添加
-
+- UserParameter
 ```
 UserParameter=authorized_keys,sudo /usr/bin/cksum /root/.ssh/authorized_keys|awk '{print $1}'
 ```
-
 如果你有好点子，你可以修改
 
-items配置如下
+- items
 
 ![auth1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth1.png)
+
 - Trigger
+
 ![auth2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth2.png)
 
 ## iptables
 
 我仍然使用了及其简单的方式来监控iptables变化，但是你需要注意，这个变化的报警的时间非常短
-
+- UserParameter
 ```
 UserParameter=iptables_lins,/usr/bin/sudo iptables -S |md5sum|cut -c 1-5
 UserParameter=iptables_file,/usr/bin/sudo /usr/bin/cksum /etc/sysconfig/iptables|cut -c 1-5
 ```
-
 另外，需要sudo权限
-
 ```
 zabbix ALL=(root)NOPASSWD:/usr/sbin/iptables,/usr/bin/cksum /etc/sysconfig/iptables
 ```
+
+- items
+
 ![iptables1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables1.png)
+
+- Trigger
+
 ![iptables2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables2.png)
 ## 磁盘io
 
 在这里下载perl脚本。并且要给755权限
-
-zabbix config 
-
+- UserParameter
 ```
 UserParameter=discovery.disks.iostats,/etc/zabbix/scripts/disk.pl
 UserParameter=custom.vfs.dev.read.sectors[*],cat /proc/diskstats | grep $1 | head -1 | awk '{print $$6}'
@@ -76,7 +79,13 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 ```
 
 这个是一个自动发现做的
+
+- items
+
 ![disl1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk1.png)
+
+- Trigger
+
 ![disk2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk2.png)
 
 ## nginx和php-fpm
@@ -106,15 +115,26 @@ server {
 - php
 
 php就更简单了，直接访问抓取即可
-
+- UserParameter
 ```
 UserParameter=nginx.status[*],/etc/zabbix/scripts/nginx_status.sh $1 $2
 UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm_status?xml" | grep "<$1>" | awk -F'>|<' '{ print $$3}'
 ```
+
+- nginx-items
+
 ![nginx1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx1.png)
+
+- Trigger
+
 ![nginx2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx2.png)
-- php-fpm
+
+- php-fpm-items
+
 ![php-fpm1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/php1.png)
+
+- Trigger
+
 ![php2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/php2.png)
 ## tcp
 
@@ -126,13 +146,20 @@ UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm
 */1 * * * * /usr/sbin/ss  -tan|awk 'NR>1{++S[$1]}END{for (a in S) print a,S[a]}' > /tmp/tcp-status.txt
 */1 * * * * /usr/sbin/ss -o state established '( dport = :http or sport = :http )' |grep -v Netid > /tmp/httpNUB.txt
 ```
-
+- UserParameter
 ```
 UserParameter=tcp.status[*],awk '{if ($$1~/^$1/)print $$2}' /tmp/tcp-status.txt
 UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 ```
+
+- items
+
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp1.png)
+
+- Trigger
+
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp2.png)
+
 ## mariadb-galera
 
 这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构
@@ -148,5 +175,11 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 ```
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
+
+- items
+
 ![mariadb-gra](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra1.png)
+
+- Trigger
+
 ![mariadb-gra2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra2.png)
