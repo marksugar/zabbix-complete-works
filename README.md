@@ -5,14 +5,24 @@
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
-* [authorized_keys](#authorized_keys)
+![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `基础监控`
+
+* [/root/.ssh/authorized_keys](#authorized_keys)
+* [/etc/passwd](#passwd)
+* [/etc/zabbix/zabbix_agentd.conf](#zabbix_agent.conf)
+* [OOM](#oom)
 * [iptables](#iptables)
 * [磁盘io](#磁盘io)
-* [nginx和php-fpm](#nginx和php-fpm)
 * [tcp](#tcp)
+
+![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `应用监控`
+
 * [mariadb-galera](#mariadb-galera)
+* [nginx和php-fpm](#nginx和php-fpm)
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
+
+-- **Agent安装**
 
 我在最新的agentd安装脚本中，使用的4.0版本，在这个脚本的包中包含如上的几种基础监控项目。
 
@@ -21,6 +31,8 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ```
 
 > 你需要指定server ip，`base  -s local IPADDR`
+
+-- **Server安装**
 
 ## authorized_keys
 
@@ -36,13 +48,37 @@ UserParameter=authorized_keys,sudo /usr/bin/cksum /root/.ssh/authorized_keys|awk
 ```
 如果你有好点子，你可以修改
 
-- items
+- Items
 
 ![auth1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth1.png)
 
 - Trigger
 
 ![auth2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/auth2.png)
+
+## passwd
+
+```
+UserParameter=status_passwd,cksum /etc/passwd|cut -c 1-5
+```
+
+- Items
+- Trigger
+
+## zabbix_agent.conf
+
+Not Items
+
+key : `vfs.file.cksum[/etc/zabbix/zabbix_agentd.conf]`
+
+## OOM
+
+```
+UserParameter=OOM_stats,sudo awk '/kill|OOM|killer/{print $0}' /var/log/messages|md5sum |cut -c 1-5
+```
+
+- Items
+- Trigger
 
 ## iptables
 
@@ -57,7 +93,7 @@ UserParameter=iptables_file,/usr/bin/sudo /usr/bin/cksum /etc/sysconfig/iptables
 zabbix ALL=(root)NOPASSWD:/usr/sbin/iptables,/usr/bin/cksum /etc/sysconfig/iptables
 ```
 
-- items
+- Items
 
 ![iptables1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables1.png)
 
@@ -80,7 +116,7 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 
 这个是一个自动发现做的
 
-- items
+- Items
 
 ![disl1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk1.png)
 
@@ -121,7 +157,7 @@ UserParameter=nginx.status[*],/etc/zabbix/scripts/nginx_status.sh $1 $2
 UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm_status?xml" | grep "<$1>" | awk -F'>|<' '{ print $$3}'
 ```
 
-- nginx-items
+- nginx-Items
 
 ![nginx1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx1.png)
 
@@ -129,7 +165,7 @@ UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm
 
 ![nginx2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/nginx2.png)
 
-- php-fpm-items
+- php-fpm-Items
 
 ![php-fpm1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/php1.png)
 
@@ -152,7 +188,7 @@ UserParameter=tcp.status[*],awk '{if ($$1~/^$1/)print $$2}' /tmp/tcp-status.txt
 UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 ```
 
-- items
+- Items
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp1.png)
 
@@ -176,7 +212,7 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
 
-- items
+- Items
 
 ![mariadb-gra](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra1.png)
 
