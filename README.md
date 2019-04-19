@@ -34,6 +34,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 -- **Server安装**
 
+*docker安装参考[官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
 ```
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
