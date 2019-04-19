@@ -43,15 +43,17 @@ docker-compose -f docker-compose.yaml up -d
 
 创建索引：curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/elasticsearch|bash
 
-然后导入sql
+如果在compose中使用了DB_SERVER_ROOT_PASS变量，将会自动导入，省略这一步。
 
 - MySQL
 
 Character set utf8 and utf8_bin collation is required for Zabbix server to work properly with MySQL database.
 
 zabbix服务器需要字符集utf8和utf8_bin排序才能与MySQL数据库一起正常工作.
+
+docker rm -f zabbix-server-mysql zabbix-web-nginx-mysql
 ```
-shell> mysql -uroot -p <password>
+shell> mysql -uroot -p abc123
 
 MariaDB [(none)]>  create database zabbix character set utf8 collate utf8_bin;
 Query OK, 1 row affected (0.00 sec)
@@ -70,6 +72,8 @@ mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < schema.sql
 mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < images.sql
 mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < data.sql
 ```
+或者这样
+zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uzabbix -ppassword zabbix
 
 参考如下页面：
 
