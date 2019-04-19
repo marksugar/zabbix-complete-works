@@ -47,23 +47,26 @@ docker-compose -f docker-compose.yaml up -d
 - MySQL
 
 Character set utf8 and utf8_bin collation is required for Zabbix server to work properly with MySQL database.
+
 zabbix服务器需要字符集utf8和utf8_bin排序才能与MySQL数据库一起正常工作.
 ```
-shell> mysql -uroot -p<password>
+shell> mysql -uroot -p <password>
 mysql> create database zabbix character set utf8 collate utf8_bin;
 mysql> grant all privileges on zabbix.* to zabbix@localhost identified by '<password>';
 mysql> quit;
 ```
 If you use Zabbix packages continue with instructions for Debian/Ubuntu or RHEL/CentOS to import the data into the database.
+
 如果您使用Zabbix包继续使用Debian / Ubuntu或RHEL / CentOS的指令将数据导入数据库.
 ```
 shell> cd database/mysql
-shell> mysql -uzabbix -p<password> zabbix < schema.sql
+shell> mysql -uzabbix -p <password> zabbix < schema.sql
 # stop here if you are creating database for Zabbix proxy
 shell> mysql -uzabbix -p<password> zabbix < images.sql
 shell> mysql -uzabbix -p<password> zabbix < data.sql
 ```
-参考：
+
+参考如下页面：
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
 
