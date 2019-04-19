@@ -52,19 +52,23 @@ Character set utf8 and utf8_bin collation is required for Zabbix server to work 
 zabbix服务器需要字符集utf8和utf8_bin排序才能与MySQL数据库一起正常工作.
 ```
 shell> mysql -uroot -p <password>
-mysql> create database zabbix character set utf8 collate utf8_bin;
-mysql> grant all privileges on zabbix.* to zabbix@localhost identified by '<password>';
-mysql> quit;
+
+MariaDB [(none)]>  create database zabbix character set utf8 collate utf8_bin;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]>  grant all privileges on zabbix.* to zabbix@127.0.0.1 identified by 'password';
+Query OK, 0 rows affected (0.00 sec)
+
 ```
 If you use Zabbix packages continue with instructions for Debian/Ubuntu or RHEL/CentOS to import the data into the database.
 
 如果您使用Zabbix包继续使用Debian / Ubuntu或RHEL / CentOS的指令将数据导入数据库.
 ```
 shell> cd database/mysql
-shell> mysql -uzabbix -p <password> zabbix < schema.sql
+mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < schema.sql
 # stop here if you are creating database for Zabbix proxy
-shell> mysql -uzabbix -p<password> zabbix < images.sql
-shell> mysql -uzabbix -p<password> zabbix < data.sql
+mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < images.sql
+mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < data.sql
 ```
 
 参考如下页面：
@@ -96,6 +100,7 @@ UserParameter=authorized_keys,sudo /usr/bin/cksum /root/.ssh/authorized_keys|awk
 
 ## passwd
 
+在最新的版本中已经存在
 ```
 UserParameter=status_passwd,cksum /etc/passwd|cut -c 1-5
 ```
