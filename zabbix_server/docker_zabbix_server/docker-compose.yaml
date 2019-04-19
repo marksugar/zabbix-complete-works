@@ -1,20 +1,23 @@
 version: '3.5'
 services:
   mariadb:
-    image: marksugar/mariadb:10.2.15
-    container_name: mariadb
+    image: mysql:8.0.15
+    container_name: mysql
     privileged: true
     restart: always
     network_mode: "host"
+    command: [mysqld, --character-set-server=utf8, --collation-server=utf8_bin, --default-authentication-plugin=mysql_native_password]
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /data/mariadb:/data/mariadb:rw
+     - /data/mysql:/var/lib/mysql:rw
+    user: root
+    stop_grace_period: 1m
     environment:
-      - MYSQL_DATABASE=jumpserver
-      - MYSQL_USER=jumpserver
-      - MYSQL_PASSWORD=ispasswd
-    ports:
-      - "3306"
+     - MYSQL_ROOT_PASSWORD=abc123
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+
   elasticsearch:
     image: elasticsearch:5.6.16-alpine
     container_name: elasticsearch
@@ -32,6 +35,11 @@ services:
       - mariadb
     sysctls:
      - net.core.somaxconn=65535
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+
   zabbix-server:
     image: zabbix/zabbix-server-mysql:alpine-4.2-latest
     container_name: zabbix-server-mysql
@@ -57,25 +65,26 @@ services:
      - MYSQL_DATABASE=zabbix
      - MYSQL_USER=zabbix
      - MYSQL_PASSWORD=password
+     - MYSQL_ROOT_PASSWORD=abc123
      - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200 # elasticsearch
      - ZBX_HISTORYSTORAGETYPES=uint,dbl,str,log,text # stor add elasticsearch type
      #  zabbix_server configure
-     - ZBX_CACHESIZE=1024M
-     - ZBX_CACHEUPDATEFREQUENCY=100
-     - ZBX_STARTDBSYNCERS=100
-     - ZBX_HISTORYCACHESIZE=1024M
-     - ZBX_HISTORYINDEXCACHESIZE=512M
-     - ZBX_TRENDCACHESIZE=2046M
-     - ZBX_VALUECACHESIZE=2048M
-     - ZBX_TRAPPERTIMEOUT=30
-     - ZBX_UNREACHABLEPERIOD=120
-     - ZBX_UNAVAILABLEDELAY=80
-     - ZBX_STARTTRAPPERS=150
-     - ZBX_STARTPOLLERS=150
-     - ZBX_STARTPOLLERSUNREACHABLE=50
-     - ZBX_STARTPINGERS=10
-     - ZBX_STARTDISCOVERERS=10
-     - ZBX_STARTHTTPPOLLERS=1
+#     - ZBX_CACHESIZE=1024M
+#     - ZBX_CACHEUPDATEFREQUENCY=60
+#     - ZBX_STARTDBSYNCERS=4
+#     - ZBX_HISTORYCACHESIZE=1024M
+#     - ZBX_HISTORYINDEXCACHESIZE=512M
+#     - ZBX_TRENDCACHESIZE=2046M
+#     - ZBX_VALUECACHESIZE=2048M
+#     - ZBX_TRAPPERTIMEOUT=30
+#     - ZBX_UNREACHABLEPERIOD=120
+#     - ZBX_UNAVAILABLEDELAY=80
+#     - ZBX_STARTTRAPPERS=50
+#     - ZBX_STARTPOLLERS=50
+#     - ZBX_STARTPOLLERSUNREACHABLE=50
+#     - ZBX_STARTPINGERS=10
+#     - ZBX_STARTDISCOVERERS=10
+#     - ZBX_STARTHTTPPOLLERS=1
     ulimits:
      nproc: 65535
      nofile:
@@ -95,6 +104,11 @@ services:
      - net.ipv4.conf.all.accept_redirects=0
      - net.ipv4.conf.all.secure_redirects=0
      - net.ipv4.conf.all.send_redirects=0
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+
 
   zabbix-web-nginx-mysql:
     image: zabbix/zabbix-web-nginx-mysql:alpine-4.2-latest
@@ -144,11 +158,16 @@ services:
      com.zabbix.webserver: "nginx"
      com.zabbix.dbtype: "mysql"
      com.zabbix.os: "alpine"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+
 #  zabbix-agent:
 #    image: zabbix/zabbix-agent:alpine-4.2-latest
 #      container_name: zabbix-agent
 #      restart: always
-#      network_mode: "host"  
+#      network_mode: "host"
 #    ports:
 #     - "10050:10050"
 #    volumes:
@@ -170,7 +189,7 @@ services:
 #    privileged: true
 #    pid: "host"
 #    depends_on:
-#     - mariadb
+#     - mysql
 #     - elasticsearch
 #     - zabbix-server
 #     - zabbix-web-nginx-mysql
