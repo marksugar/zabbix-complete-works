@@ -1,0 +1,117 @@
+curl -X PUT \
+ http://127.0.0.1:9200/text \
+ -H 'content-type:application/json' \
+ -d '{
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_template/uint_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "template": "uint*",
+   "index_patterns": ["uint*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "type" : "long"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_template/text_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "template": "text*",
+   "index_patterns": ["text*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/uint-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "daily uint index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "uint-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'

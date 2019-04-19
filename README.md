@@ -34,6 +34,9 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 -- **Server安装**
 
+
+参考：https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
+
 ## authorized_keys
 
 这需要sudo权限

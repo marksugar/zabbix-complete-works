@@ -1,0 +1,176 @@
+version: '3.5'
+services:
+  mariadb:
+    image: marksugar/mariadb:10.2.15
+    container_name: mariadb
+    privileged: true
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/mariadb:/data/mariadb:rw
+    environment:
+      - MYSQL_DATABASE=jumpserver
+      - MYSQL_USER=jumpserver
+      - MYSQL_PASSWORD=ispasswd
+    ports:
+      - "3306"
+  elasticsearch:
+    image: elasticsearch:5.6.16-alpine
+    container_name: elasticsearch
+    privileged: true
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/elasticsearch/data:/usr/share/elasticsearch/data
+      - /data/elasticsearch/logs:/usr/share/elasticsearch/logs
+    ports:
+      - "9200"
+      - "9300"
+    depends_on:
+      - mariadb
+    sysctls:
+     - net.core.somaxconn=65535
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:alpine-4.2-latest
+    container_name: zabbix-server-mysql
+    restart: always
+    network_mode: "host"
+    depends_on:
+     - mariadb
+     - elasticsearch
+    ports:
+     - "10051:10051"
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
+     - /data/zabbix/zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
+     - /data/zabbix/zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+     - /data/zabbix/zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+     - /data/zabbix/zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+     - /data/zabbix/zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+     - /data/zabbix/zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+     - /data/zabbix/zbx_env/var/lib/zabbix/snmptraps:/var/lib/zabbix/snmptraps:ro
+    environment:
+     - DB_SERVER_HOST=127.0.0.1
+     - MYSQL_DATABASE=zabbix
+     - MYSQL_USER=zabbix
+     - MYSQL_PASSWORD=password
+     - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200 # elasticsearch
+     - ZBX_HISTORYSTORAGETYPES=uint,dbl,str,log,text # stor add elasticsearch type
+     #  zabbix_server configure
+     - ZBX_CACHESIZE=1024M
+     - ZBX_CACHEUPDATEFREQUENCY=100
+     - ZBX_STARTDBSYNCERS=100
+     - ZBX_HISTORYCACHESIZE=1024M
+     - ZBX_HISTORYINDEXCACHESIZE=512M
+     - ZBX_TRENDCACHESIZE=2046M
+     - ZBX_VALUECACHESIZE=2048M
+     - ZBX_TRAPPERTIMEOUT=30
+     - ZBX_UNREACHABLEPERIOD=120
+     - ZBX_UNAVAILABLEDELAY=80
+     - ZBX_STARTTRAPPERS=150
+     - ZBX_STARTPOLLERS=150
+     - ZBX_STARTPOLLERSUNREACHABLE=50
+     - ZBX_STARTPINGERS=10
+     - ZBX_STARTDISCOVERERS=10
+     - ZBX_STARTHTTPPOLLERS=1
+    ulimits:
+     nproc: 65535
+     nofile:
+      soft: 20000
+      hard: 40000
+    deploy:
+     resources:
+      limits:
+        cpus: '0.70'
+        memory: 1G
+      reservations:
+        cpus: '0.5'
+        memory: 512M
+    user: root
+    sysctls:
+     - net.ipv4.ip_local_port_range=1024 65000
+     - net.ipv4.conf.all.accept_redirects=0
+     - net.ipv4.conf.all.secure_redirects=0
+     - net.ipv4.conf.all.send_redirects=0
+
+  zabbix-web-nginx-mysql:
+    image: zabbix/zabbix-web-nginx-mysql:alpine-4.2-latest
+    container_name: zabbix-web-nginx-mysql
+    restart: always
+    network_mode: "host"
+    ports:
+     - "8081:80"
+     - "8443:443"
+    environment:
+     - DB_SERVER_HOST=127.0.0.1
+     - MYSQL_DATABASE=zabbix
+     - MYSQL_USER=zabbix
+     - MYSQL_PASSWORD=password
+     - ZBX_SERVER_HOST=127.0.0.1
+     - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200
+     - ZBX_HISTORYSTORAGETYPES=['dbl','uint','str', 'text', 'log'] # uint,dbl,str,log,text
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
+     - /data/zabbix/zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
+    deploy:
+     resources:
+      limits:
+        cpus: '0.70'
+        memory: 512M
+      reservations:
+        cpus: '0.5'
+        memory: 256M
+    user: root
+    depends_on:
+     - mariadb
+     - elasticsearch
+     - zabbix-server
+    healthcheck:
+     test: ["CMD", "curl", "-f", "http://localhost"]
+     interval: 10s
+     timeout: 5s
+     retries: 3
+     start_period: 30s
+    sysctls:
+     - net.core.somaxconn=65535
+    labels:
+     com.zabbix.description: "Zabbix frontend on Nginx web-server with MySQL database support"
+     com.zabbix.company: "Zabbix SIA"
+     com.zabbix.component: "zabbix-frontend"
+     com.zabbix.webserver: "nginx"
+     com.zabbix.dbtype: "mysql"
+     com.zabbix.os: "alpine"
+#  zabbix-agent:
+#    image: zabbix/zabbix-agent:alpine-4.2-latest
+#      container_name: zabbix-agent
+#      restart: always
+#      network_mode: "host"  
+#    ports:
+#     - "10050:10050"
+#    volumes:
+#     - /etc/localtime:/etc/localtime:ro
+#     - /etc/timezone:/etc/timezone:ro
+#     - /data/zabbix_agent/zbx_env/etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d:ro
+#     - /data/zabbix_agent/zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+#     - /data/zabbix_agent/zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+#     - /data/zabbix_agent/zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+#    deploy:
+#     resources:
+#      limits:
+#        cpus: '0.2'
+#        memory: 128M
+#      reservations:
+#        cpus: '0.1'
+#        memory: 64M
+#    user: root
+#    privileged: true
+#    pid: "host"
+#    depends_on:
+#     - mariadb
+#     - elasticsearch
+#     - zabbix-server
+#     - zabbix-web-nginx-mysql
