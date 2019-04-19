@@ -38,7 +38,11 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
-仍然需要导入sql
+*elasticsearch*
+
+创建索引：curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/elasticsearch|bash
+
+然后导入sql
 
 - MySQL
 
@@ -59,7 +63,9 @@ shell> mysql -uzabbix -p<password> zabbix < schema.sql
 shell> mysql -uzabbix -p<password> zabbix < images.sql
 shell> mysql -uzabbix -p<password> zabbix < data.sql
 ```
-参考：https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
+参考：
+https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
+https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
 
 ## authorized_keys
 
