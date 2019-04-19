@@ -67,6 +67,7 @@ shell> mysql -uzabbix -p<password> zabbix < data.sql
 ```
 
 参考如下页面：
+
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
 
