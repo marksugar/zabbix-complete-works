@@ -43,39 +43,8 @@ docker-compose -f docker-compose.yaml up -d
 
 创建索引：curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/elasticsearch|bash
 
-如果在compose中使用了DB_SERVER_ROOT_PASS变量，将会自动导入，省略这一步。
 
-- MySQL
-
-Character set utf8 and utf8_bin collation is required for Zabbix server to work properly with MySQL database.
-
-zabbix服务器需要字符集utf8和utf8_bin排序才能与MySQL数据库一起正常工作.
-
-docker rm -f zabbix-server-mysql zabbix-web-nginx-mysql
-```
-shell> mysql -uroot -p abc123
-
-MariaDB [(none)]>  create database zabbix character set utf8 collate utf8_bin;
-Query OK, 1 row affected (0.00 sec)
-
-MariaDB [(none)]>  grant all privileges on zabbix.* to zabbix@127.0.0.1 identified by 'password';
-Query OK, 0 rows affected (0.00 sec)
-
-```
-If you use Zabbix packages continue with instructions for Debian/Ubuntu or RHEL/CentOS to import the data into the database.
-
-如果您使用Zabbix包继续使用Debian / Ubuntu或RHEL / CentOS的指令将数据导入数据库.
-```
-shell> cd database/mysql
-mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < schema.sql
-# stop here if you are creating database for Zabbix proxy
-mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < images.sql
-mysql> mysql -uzabbix -ppassword -h127.0.0.1 zabbix < data.sql
-```
-或者这样
-zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uzabbix -ppassword zabbix
-
-参考如下页面：
+如果手动导入sql参考如下页面：
 
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
