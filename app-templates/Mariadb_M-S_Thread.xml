@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.0</version>
-    <date>2019-04-19T05:47:51Z</date>
+    <date>2019-04-20T01:33:32Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -9,43 +9,27 @@
     </groups>
     <templates>
         <template>
-            <template>MySysOps_Templates</template>
-            <name>MySysOps_Templates</name>
+            <template>Mariadb_M-S_Thread</template>
+            <name>Mariadb_M-S_Thread</name>
             <description/>
             <groups>
                 <group>
                     <name>Templates</name>
                 </group>
             </groups>
-            <applications>
-                <application>
-                    <name>/etc/passwd</name>
-                </application>
-                <application>
-                    <name>/etc/zabbix/zabbix_agentd.conf</name>
-                </application>
-                <application>
-                    <name>authorized_keys</name>
-                </application>
-                <application>
-                    <name>iptables</name>
-                </application>
-                <application>
-                    <name>OOM</name>
-                </application>
-            </applications>
+            <applications/>
             <items>
                 <item>
-                    <name>Checksum of authorized_keys</name>
+                    <name>Slave_IO_Running</name>
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>authorized_keys</key>
-                    <delay>3m</delay>
+                    <key>maria.IO_SQL[Slave_IO_Running]</key>
+                    <delay>30s</delay>
                     <history>15d</history>
-                    <trends>45d</trends>
+                    <trends>0</trends>
                     <status>0</status>
-                    <value_type>3</value_type>
+                    <value_type>1</value_type>
                     <allowed_hosts/>
                     <units/>
                     <snmpv3_contextname/>
@@ -65,11 +49,7 @@
                     <port/>
                     <description/>
                     <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>authorized_keys</name>
-                        </application>
-                    </applications>
+                    <applications/>
                     <valuemap/>
                     <logtimefmt/>
                     <preprocessing/>
@@ -95,16 +75,16 @@
                     <master_item/>
                 </item>
                 <item>
-                    <name>Checksum of $1</name>
+                    <name>Slave_SQL_Running</name>
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>vfs.file.cksum[/etc/zabbix/zabbix_agentd.conf]</key>
-                    <delay>5m</delay>
+                    <key>maria.IO_SQL[Slave_SQL_Running]</key>
+                    <delay>30s</delay>
                     <history>15d</history>
-                    <trends>45d</trends>
+                    <trends>0</trends>
                     <status>0</status>
-                    <value_type>3</value_type>
+                    <value_type>1</value_type>
                     <allowed_hosts/>
                     <units/>
                     <snmpv3_contextname/>
@@ -124,11 +104,7 @@
                     <port/>
                     <description/>
                     <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>/etc/zabbix/zabbix_agentd.conf</name>
-                        </application>
-                    </applications>
+                    <applications/>
                     <valuemap/>
                     <logtimefmt/>
                     <preprocessing/>
@@ -143,7 +119,7 @@
                     <http_proxy/>
                     <headers/>
                     <retrieve_mode>0</retrieve_mode>
-                    <request_method>0</request_method>
+                    <request_method>1</request_method>
                     <output_format>0</output_format>
                     <allow_traps>0</allow_traps>
                     <ssl_cert_file/>
@@ -163,10 +139,26 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{MySysOps_Templates:authorized_keys.diff(0)}&gt;0</expression>
+            <expression>{Mariadb_M-S_Thread:maria.IO_SQL[Slave_IO_Running].regexp(Yes)}&lt;&gt;1</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
-            <name>/root/.ssh/authorized_keys has been changed on {HOST.NAME}</name>
+            <name>{HOST.NAME}  Mariadb Slave IO Not Running</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
+            <url/>
+            <status>0</status>
+            <priority>4</priority>
+            <description/>
+            <type>0</type>
+            <manual_close>0</manual_close>
+            <dependencies/>
+            <tags/>
+        </trigger>
+        <trigger>
+            <expression>{Mariadb_M-S_Thread:maria.IO_SQL[Slave_SQL_Running].regexp(Yes)}&lt;&gt;1</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
+            <name>{HOST.NAME}  Mariadb Slave SQL Not Running</name>
             <correlation_mode>0</correlation_mode>
             <correlation_tag/>
             <url/>
