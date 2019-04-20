@@ -41,7 +41,9 @@ docker-compose -f docker-compose.yaml up -d
 ```
 *elasticsearch*
 
-创建索引：curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/elasticsearch|bash
+创建索引：
+
+参考： https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup
 
 正常情况下你将看到如下信息：
 ```
