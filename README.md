@@ -18,7 +18,7 @@
 
 * [zabbix-agent](#---Agent安装)
 * [zabbix-server](#---server安装)
-  * [elasticsearch](##-elasticsearch)
+  * [elasticsearch](#-elasticsearch)
 * [自动发现](#---自动发现)
 
 
