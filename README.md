@@ -15,9 +15,11 @@
 *note*
 
 ![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `安装与配置`
-* [zabbix-server](#Server安装)
-* [/etc/passwd](#passwd)
-* [/etc/passwd](#passwd)
+
+* [zabbix-agent](#---Agent安装)
+* [zabbix-server](#---server安装)
+  * [elasticsearch](##-elasticsearch)
+* [自动发现](#---自动发现)
 
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
