@@ -27,7 +27,7 @@
 我在最新的agentd安装脚本中，使用的4.0版本，在这个脚本的包中包含如上的几种基础监控项目。
 
 ```
-curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local IPADDR
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local IPADDR |bash
 ```
 
 > 你需要指定server ip，`base  -s local IPADDR`
@@ -43,11 +43,24 @@ docker-compose -f docker-compose.yaml up -d
 
 创建索引：curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/elasticsearch|bash
 
+正常情况下你将看到如下信息：
+```
+$ curl http://127.0.0.1:9200/_cat/indices?v
+health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   str   cUH62ku_RHCX3xLQUbDX8A   5   1        104            0    167.6kb        167.6kb
+yellow open   text  h01E35d_T6SsXOrsuPfrdg   5   1          0            0       960b           960b
+yellow open   dbl   55o5oA-gROmN-8DwtGp7Qg   5   1      61192            0      7.6mb          7.6mb
+yellow open   uint  m0M1vUGaRb-Apg1CQxDxsQ   5   1      31298            0        4mb            4mb
+```
 
 如果手动导入sql参考如下页面：
 
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
+
+-- **自动发现**
+
+自动发现参考[zabbix4.2的自动发现教程](https://github.com/marksugar/zabbix-complete-works/blob/master/discovery.md)
 
 ## authorized_keys
 
