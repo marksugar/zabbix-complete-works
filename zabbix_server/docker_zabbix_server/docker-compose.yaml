@@ -67,7 +67,7 @@ services:
      - MYSQL_PASSWORD=password
      - MYSQL_ROOT_PASSWORD=abc123
      - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200 # elasticsearch
-     - ZBX_HISTORYSTORAGETYPES=uint,dbl,str,log,text # stor add elasticsearch type
+     - ZBX_HISTORYSTORAGETYPES=uint,str,log,text # stor add elasticsearch type
      #  zabbix_server configure
 #     - ZBX_CACHESIZE=1024M
 #     - ZBX_CACHEUPDATEFREQUENCY=60
@@ -125,7 +125,7 @@ services:
      - MYSQL_PASSWORD=password
      - ZBX_SERVER_HOST=127.0.0.1
      - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200
-     - ZBX_HISTORYSTORAGETYPES=['dbl','uint','str', 'text', 'log'] # uint,dbl,str,log,text
+     - ZBX_HISTORYSTORAGETYPES=['uint','str', 'text', 'log'] # uint,dbl,str,log,text
     volumes:
      - /etc/localtime:/etc/localtime:ro
      - /etc/timezone:/etc/timezone:ro
