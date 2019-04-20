@@ -51,7 +51,8 @@ wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/za
 docker-compose -f docker-compose.yaml up -d
 ```
 > *elasticsearch*
-你需要注意权限问题，如本示例docker-compose中需要授权:  chown -R 1000.1000 /data/elasticsearch/
+
+> 你需要注意权限问题，如本示例docker-compose中需要授权:  chown -R 1000.1000 /data/elasticsearch/
 
 我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，执行创建索引即可,你也可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
 
