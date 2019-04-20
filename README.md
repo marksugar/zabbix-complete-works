@@ -1,6 +1,17 @@
 
 ![zabbix](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/zabbixx.png)
 
+这是一个私人维护的zabbix安装脚本，它包括了zabbix-server,zabbix-agent的安装，初始化配置，在4.0之后加入了docker-compose，随后的server端都采用了docker安装。在最新的更新中，引入了elasticsearch:6.1.4。如果你喜欢这个项目，你可以在右上角点击 ♥
+
+-版本信息-
+
+| App         |   docker-compose    |    version                | User ID | port      |date      |
+| ----------------|------------- | ---------------------- | ------- | --------- |--------- |
+| mysql  | 3.5 | 8.0.15  | 999    | 3306/33060      |2019/0420  |
+| docker.elastic.co/elasticsearch/elasticsearch  |3.5 | 6.1.4  | 1000    | 9200/9300     |2019/0420  |
+| zabbix-server-mysql  |3.5 |alpine-4.2-latest  | 100/1000     | 10051    |2019/0420  |
+| zabbix-web-nginx-mysql  |3.5 |alpine-4.2-latest  | 100/1000/101    | 80     |2019/0420  |
+
 *note*
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
