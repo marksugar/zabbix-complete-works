@@ -14,6 +14,12 @@
 
 *note*
 
+![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `安装与配置`
+* [zabbix-server](#Server安装)
+* [/etc/passwd](#passwd)
+* [/etc/passwd](#passwd)
+
+
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
 ![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `基础监控`
@@ -33,7 +39,7 @@
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
--- **Agent安装**
+## -- **Agent安装**
 
 我在最新的agentd安装脚本中，使用的4.0版本，在这个脚本的包中包含如上的几种基础监控项目。
 
@@ -43,18 +49,18 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 > 你需要指定server ip，`base  -s local IPADDR`
 
--- **Server安装**
+## -- **Server安装**
 
 ```
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
 *docker和docker-compose安装参考[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)[docker-compose安装](docker和docker-compose安装参考[官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
-> *elasticsearch*
+### > *elasticsearch*
 
 **你需要注意权限问题，如本示例docker-compose中需要授权: chown -R 1000.1000 /data/elasticsearch/**
 
-我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，执行创建索引即可,你也可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
+我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，**执行创建索引**即可,你也可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
 
 正常情况下你将看到如下信息：
 ```
@@ -73,7 +79,7 @@ yellow open   uint                        JA_8kyXlSLqawyHzo28Ggw   5   1        
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts
 https://www.zabbix.com/documentation/4.2/manual/appendix/install/elastic_search_setup
 
--- **自动发现**
+## -- **自动发现**
 
 自动发现参考[zabbix4.2的自动发现教程](https://github.com/marksugar/zabbix-complete-works/blob/master/discovery.md)
 
