@@ -54,6 +54,8 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ## -- **Server安装**
 
 ```
+mkdir /data/zabbix -p
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/graphfont.TTF -o /data/zabbix/graphfont.ttf
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
