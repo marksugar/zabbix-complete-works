@@ -39,11 +39,9 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
-*elasticsearch*
+> *elasticsearch*
 
-我整理了一些索引[文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，执行创建索引即可
-
-参考： https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup
+我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，执行创建索引即可,你有可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
 
 正常情况下你将看到如下信息：
 ```
