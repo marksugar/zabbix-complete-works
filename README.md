@@ -50,7 +50,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
-> *elasticsearch*
+> # *elasticsearch*
 
 > 你需要注意权限问题，如本示例docker-compose中需要授权:  chown -R 1000.1000 /data/elasticsearch/
 
