@@ -47,10 +47,11 @@ docker-compose -f docker-compose.yaml up -d
 ```
 $ curl http://127.0.0.1:9200/_cat/indices?v
 health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
-yellow open   str   cUH62ku_RHCX3xLQUbDX8A   5   1        104            0    167.6kb        167.6kb
+yellow open   str   cUH62ku_RHCX3xLQUbDX8A   5   1        298            0    161.3kb        161.3kb
 yellow open   text  h01E35d_T6SsXOrsuPfrdg   5   1          0            0       960b           960b
-yellow open   dbl   55o5oA-gROmN-8DwtGp7Qg   5   1      61192            0      7.6mb          7.6mb
-yellow open   uint  m0M1vUGaRb-Apg1CQxDxsQ   5   1      31298            0        4mb            4mb
+yellow open   log   Ay-GODTDRdeu-6YMHJ70pA   5   1          0            0       810b           810b
+yellow open   dbl   55o5oA-gROmN-8DwtGp7Qg   5   1     118056            0     17.5mb         17.5mb
+yellow open   uint  m0M1vUGaRb-Apg1CQxDxsQ   5   1     107149            0       13mb           13mb
 ```
 
 如果手动导入sql参考如下页面：
