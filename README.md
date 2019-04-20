@@ -41,19 +41,20 @@ docker-compose -f docker-compose.yaml up -d
 ```
 *elasticsearch*
 
-创建索引：
+我整理了一些索引[文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，执行创建索引即可
 
 参考： https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup
 
 正常情况下你将看到如下信息：
 ```
 $ curl http://127.0.0.1:9200/_cat/indices?v
-health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size
-yellow open   str   cUH62ku_RHCX3xLQUbDX8A   5   1        298            0    161.3kb        161.3kb
-yellow open   text  h01E35d_T6SsXOrsuPfrdg   5   1          0            0       960b           960b
-yellow open   log   Ay-GODTDRdeu-6YMHJ70pA   5   1          0            0       810b           810b
-yellow open   dbl   55o5oA-gROmN-8DwtGp7Qg   5   1     118056            0     17.5mb         17.5mb
-yellow open   uint  m0M1vUGaRb-Apg1CQxDxsQ   5   1     107149            0       13mb           13mb
+health status index                       uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   str                         MQWM2bNNRzOvBywM7ne-lw   5   1          0            0      1.1kb          1.1kb
+yellow open   .monitoring-es-6-2019.04.20 tIfs0MkNQUCI4YuEHRmQ6g   1   1       1926          208    901.6kb        901.6kb
+yellow open   dbl                         Y0992hqaR8KTin9iXKsljQ   5   1          0            0      1.1kb          1.1kb
+yellow open   text                        s2XMyJtdQQ27b9rS3nWVfg   5   1          0            0      1.1kb          1.1kb
+yellow open   log                         MAysNczpSKGZbjfjJXBvTg   5   1          0            0      1.1kb          1.1kb
+yellow open   uint                        JA_8kyXlSLqawyHzo28Ggw   5   1          0            0      1.1kb          1.1kb
 ```
 
 如果手动导入sql参考如下页面：
