@@ -1,67 +1,9 @@
 curl -X PUT \
- http://127.0.0.1:9200/uint \
+ http://127.0.0.1:9200/_template/text_template \
  -H 'content-type:application/json' \
  -d '{
-   "settings" : {
-      "index" : {
-         "number_of_replicas" : 1,
-         "number_of_shards" : 5
-      }
-   },
-   "mappings" : {
-      "values" : {
-         "properties" : {
-            "itemid" : {
-               "type" : "long"
-            },
-            "clock" : {
-               "format" : "epoch_second",
-               "type" : "date"
-            },
-            "value" : {
-               "type" : "long"
-            }
-         }
-      }
-   }
-}'
-
-
-# dbl mapping
-curl -X PUT \
- http://127.0.0.1:9200/dbl \
- -H 'content-type:application/json' \
- -d '{
-   "settings" : {
-      "index" : {
-         "number_of_replicas" : 1,
-         "number_of_shards" : 5
-      }
-   },
-   "mappings" : {
-      "values" : {
-         "properties" : {
-            "itemid" : {
-               "type" : "long"
-            },
-            "clock" : {
-               "format" : "epoch_second",
-               "type" : "date"
-            },
-            "value" : {
-               "type" : "double"
-            }
-         }
-      }
-   }
-}'
-
-
-# str mapping
-curl -X PUT \
- http://127.0.0.1:9200/str \
- -H 'content-type:application/json' \
- -d '{
+   "template": "text*",
+   "index_patterns": ["text*"],
    "settings" : {
       "index" : {
          "number_of_replicas" : 1,
@@ -93,13 +35,12 @@ curl -X PUT \
       }
    }
 }'
-
-
-# text mapping
 curl -X PUT \
- http://127.0.0.1:9200/text \
+ http://127.0.0.1:9200/_template/str_template \
  -H 'content-type:application/json' \
  -d '{
+   "template": "str*",
+   "index_patterns": ["str*"],
    "settings" : {
       "index" : {
          "number_of_replicas" : 1,
@@ -131,11 +72,86 @@ curl -X PUT \
       }
    }
 }'
-# log mapping
 curl -X PUT \
- http://127.0.0.1:9200/log \
+ http://127.0.0.1:9200/_template/dbl_template \
  -H 'content-type:application/json' \
  -d '{
+   "template": "dbl*",
+   "index_patterns": ["dbl*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_template/log_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "template": "log*",
+   "index_patterns": ["log*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_template/uint_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "template": "uint*",
+   "index_patterns": ["uint*"],
    "settings" : {
       "index" : {
          "number_of_replicas" : 1,
