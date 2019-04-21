@@ -59,7 +59,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
-*docker和docker-compose安装参考[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)[docker-compose安装](docker和docker-compose安装参考[官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
+*docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
 ### > *elasticsearch*
 
 **你需要注意权限问题，如本示例docker-compose中需要授权: chown -R 1000.1000 /data/elasticsearch/**
