@@ -21,6 +21,7 @@
   * [elasticsearch](#-elasticsearch)
 * [自动发现](#---自动发现)
 
+如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
