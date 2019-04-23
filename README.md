@@ -181,7 +181,7 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 
 > 注意 
 
-你需要创建正则表达式
+你需要创建正则表达式： 名称为`Linux disks for autodiscovery`(必须)
 
 ![20190423](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/20190423.png)
 
