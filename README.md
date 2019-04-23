@@ -179,6 +179,17 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 
 ![disk2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/disk2.png)
 
+> 注意 
+
+你需要创建正则表达式
+
+![20190423](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/20190423.png)
+
+- Expression
+```
+^(s|x?v?)d[a-z][1-9]{0,}$
+```
+
 ## nginx和php-fpm
 
 准备
