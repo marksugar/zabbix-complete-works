@@ -43,6 +43,7 @@ services:
   zabbix-server:
     image: zabbix/zabbix-server-mysql:alpine-4.2-latest
     container_name: zabbix-server-mysql
+    privileged: true
     restart: always
     network_mode: "host"
     depends_on:
@@ -68,25 +69,25 @@ services:
      - MYSQL_ROOT_PASSWORD=abc123
      - ZBX_HISTORYSTORAGEURL=http://127.0.0.1:9200 # elasticsearch
      - ZBX_HISTORYSTORAGETYPES=dbl,uint,str,log,text # stor add elasticsearch type
-     - DebugLevel=5
+     - DebugLevel=3
      - HistoryStorageDateIndex=1
      #  zabbix_server configure
-#     - ZBX_CACHESIZE=1024M
-#     - ZBX_CACHEUPDATEFREQUENCY=60
-#     - ZBX_STARTDBSYNCERS=4
-#     - ZBX_HISTORYCACHESIZE=1024M
-#     - ZBX_HISTORYINDEXCACHESIZE=512M
-#     - ZBX_TRENDCACHESIZE=2046M
-#     - ZBX_VALUECACHESIZE=2048M
-#     - ZBX_TRAPPERTIMEOUT=30
-#     - ZBX_UNREACHABLEPERIOD=120
-#     - ZBX_UNAVAILABLEDELAY=80
-#     - ZBX_STARTTRAPPERS=50
-#     - ZBX_STARTPOLLERS=50
-#     - ZBX_STARTPOLLERSUNREACHABLE=50
-#     - ZBX_STARTPINGERS=10
-     - ZBX_STARTDISCOVERERS=10
-#     - ZBX_STARTHTTPPOLLERS=1
+     - ZBX_CACHESIZE=1024M
+     - ZBX_CACHEUPDATEFREQUENCY=60
+     - ZBX_STARTDBSYNCERS=4
+     - ZBX_HISTORYCACHESIZE=1024M
+     - ZBX_HISTORYINDEXCACHESIZE=512M
+     - ZBX_TRENDCACHESIZE=2046M
+     - ZBX_VALUECACHESIZE=2048M
+     - ZBX_TRAPPERTIMEOUT=30
+     - ZBX_UNREACHABLEPERIOD=120
+     - ZBX_UNAVAILABLEDELAY=80
+     - ZBX_STARTTRAPPERS=15
+     - ZBX_STARTPOLLERS=15
+     - ZBX_STARTPOLLERSUNREACHABLE=15
+     - ZBX_STARTPINGERS=15
+     - ZBX_STARTDISCOVERERS=15
+     - ZBX_STARTHTTPPOLLERS=1
     ulimits:
      nproc: 65535
      nofile:
@@ -106,6 +107,10 @@ services:
      - net.ipv4.conf.all.accept_redirects=0
      - net.ipv4.conf.all.secure_redirects=0
      - net.ipv4.conf.all.send_redirects=0
+     - net.ipv4.tcp_fin_timeout=30
+     - net.ipv4.tcp_keepalive_time=1800
+     - net.ipv4.tcp_tw_reuse=1
+     - net.ipv4.tcp_tw_recycle=1
     logging:
       driver: "json-file"
       options:
@@ -133,6 +138,7 @@ services:
      - /etc/localtime:/etc/localtime:ro
      - /etc/timezone:/etc/timezone:ro
      - /data/zabbix/zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
+     - /data/zabbix/graphfont.ttf:/usr/share/zabbix/fonts/graphfont.ttf
     deploy:
      resources:
       limits:
