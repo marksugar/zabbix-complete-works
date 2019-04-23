@@ -111,6 +111,7 @@ services:
      - net.ipv4.tcp_keepalive_time=1800
      - net.ipv4.tcp_tw_reuse=1
      - net.ipv4.tcp_tw_recycle=1
+     - net.core.somaxconn=65535     
     logging:
       driver: "json-file"
       options:
