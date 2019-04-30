@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.2</version>
-    <date>2019-04-20T01:35:49Z</date>
+    <date>2019-04-30T12:03:30Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -45,8 +45,8 @@
                     <snmp_oid/>
                     <key>authorized_keys</key>
                     <delay>3m</delay>
-                    <history>15d</history>
-                    <trends>45d</trends>
+                    <history>30d</history>
+                    <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
@@ -104,7 +104,7 @@
                     <snmp_oid/>
                     <key>iptables_file</key>
                     <delay>30s</delay>
-                    <history>15d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -163,7 +163,7 @@
                     <snmp_oid/>
                     <key>iptables_lins</key>
                     <delay>30s</delay>
-                    <history>15d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -222,7 +222,7 @@
                     <snmp_oid/>
                     <key>OOM_stats</key>
                     <delay>30s</delay>
-                    <history>15d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -281,7 +281,7 @@
                     <snmp_oid/>
                     <key>tcp.httpd_established</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -340,7 +340,7 @@
                     <snmp_oid/>
                     <key>tcp.status[CLOSE-WAIT]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -399,7 +399,7 @@
                     <snmp_oid/>
                     <key>tcp.status[CLOSED]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -458,7 +458,7 @@
                     <snmp_oid/>
                     <key>tcp.status[CLOSING]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -517,7 +517,7 @@
                     <snmp_oid/>
                     <key>tcp.status[ESTAB]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -576,7 +576,7 @@
                     <snmp_oid/>
                     <key>tcp.status[FIN-WAIT-1]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -635,7 +635,7 @@
                     <snmp_oid/>
                     <key>tcp.status[FIN-WAIT-2]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -694,7 +694,7 @@
                     <snmp_oid/>
                     <key>tcp.status[LAST-ACK]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -753,7 +753,7 @@
                     <snmp_oid/>
                     <key>tcp.status[LISTEN]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -812,7 +812,7 @@
                     <snmp_oid/>
                     <key>tcp.status[SYN-RECV]</key>
                     <delay>30s</delay>
-                    <history>90d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -871,7 +871,7 @@
                     <snmp_oid/>
                     <key>tcp.status[SYN-SENT]</key>
                     <delay>1m</delay>
-                    <history>15d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -930,7 +930,7 @@
                     <snmp_oid/>
                     <key>tcp.status[TIME-WAIT]</key>
                     <delay>1m</delay>
-                    <history>15d</history>
+                    <history>30d</history>
                     <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
@@ -989,8 +989,8 @@
                     <snmp_oid/>
                     <key>vfs.file.cksum[/etc/zabbix/zabbix_agentd.conf]</key>
                     <delay>5m</delay>
-                    <history>15d</history>
-                    <trends>45d</trends>
+                    <history>30d</history>
+                    <trends>90d</trends>
                     <status>0</status>
                     <value_type>3</value_type>
                     <allowed_hosts/>
@@ -1119,7 +1119,14 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -1179,7 +1186,14 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -1239,7 +1253,20 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                                <step>
+                                    <type>1</type>
+                                    <params>512</params>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -1299,7 +1326,14 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -1359,7 +1393,14 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -1419,7 +1460,20 @@
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing/>
+                            <preprocessing>
+                                <step>
+                                    <type>10</type>
+                                    <params/>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                                <step>
+                                    <type>1</type>
+                                    <params>512</params>
+                                    <error_handler>0</error_handler>
+                                    <error_handler_params/>
+                                </step>
+                            </preprocessing>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
