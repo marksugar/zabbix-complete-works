@@ -54,17 +54,45 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 ## -- **Server安装**
 
+关于zabbix server分为mysql和timescaledb，但是都启用了elasticsearch
+
+- mysql
 ```
 mkdir /data/zabbix -p
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/graphfont.TTF -o /data/zabbix/graphfont.ttf
-wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server/docker-compose.yaml
+wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-mysql/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
 *docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
+
+- timescaledb
+```
+mkdir /data/zabbix -p
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/graphfont.TTF -o /data/zabbix/graphfont.ttf
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/postgresql.conf -o /data/zabbix/postgresql.conf
+wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/docker-compose.yaml
+docker-compose -f docker-compose.yaml up -d
+```
+这里会执行sql,参考[zabbix文档](https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts)
+```
+CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+SELECT create_hypertable('history', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('history_uint', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('history_log', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('history_text', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('history_str', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('trends', 'clock', chunk_time_interval => 86400, migrate_data => true);
+SELECT create_hypertable('trends_uint', 'clock', chunk_time_interval => 86400, migrate_data => true);
+UPDATE config SET db_extension='timescaledb',hk_history_global=1,hk_trends_global=1;
+```
+
 ### > *elasticsearch*
 
-**你需要注意权限问题，如本示例docker-compose中需要授权: chown -R 1000.1000 /data/elasticsearch/**
-
+**你需要注意权限问题，如本示例docker-compose中需要授权: **
+```
+mkdir /data/elasticsearch/{data,logs} -p
+chown -R 1000.1000 /data/elasticsearch/
+```
 我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，**执行创建索引**即可,你也可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
 
 正常情况下你将看到如下信息：
