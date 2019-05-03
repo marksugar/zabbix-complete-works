@@ -11,7 +11,7 @@
 | docker.elastic.co/elasticsearch/elasticsearch  |3.5 | 6.1.4  | 1000    | 9200/9300     |2019/0420  |
 | zabbix-server-mysql  |3.5 |alpine-4.2-latest  | 100/1000     | 10051    |2019/0420  |
 | zabbix-web-nginx-mysql  |3.5 |alpine-4.2-latest  | 100/1000/101    | 80     |2019/0420  |
-| timescaledb | 3.5| timescale/timescaledb:latest-pg11-oss |5432 |2019 05/03 |
+| timescaledb | 3.5| timescale/timescaledb:latest-pg11-oss | 70|5432 |2019 05/03 |
 
 *note*
 
