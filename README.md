@@ -53,26 +53,44 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 > 你需要指定server ip，`base  -s local IPADDR`
 
+*docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*。或者使用docker部署脚本
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/docker_init.sh|bash
+```
+
 ## -- **Server安装**
 
 关于zabbix server分为mysql和timescaledb，但是都启用了elasticsearch
 
 - mysql
 ```
-mkdir /data/zabbix -p
+mkdir /data/zabbix -p && cd /data/zabbix
+mkdir /data/elasticsearch/{data,logs} -p
+chown -R 1000.1000 /data/elasticsearch/
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/graphfont.TTF -o /data/zabbix/graphfont.ttf
 wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-mysql/docker-compose.yaml
 docker-compose -f docker-compose.yaml up -d
 ```
-*docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*
 
 - timescaledb
 ```
-mkdir /data/zabbix -p
+mkdir /data/zabbix -p && cd /data/zabbix
+mkdir /data/zabbix/elasticsearch/{data,logs} -p
+chown -R 1000.1000 /data/zabbix/elasticsearch/
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/graphfont.TTF -o /data/zabbix/graphfont.ttf
-curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/postgresql.conf -o /data/zabbix/postgresql.conf
-wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/docker-compose.yaml
+wget https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/docker-compose.yaml -O /data/zabbix/docker-compose.yml
 docker-compose -f docker-compose.yaml up -d
+```
+***提示***
+你或许需要修改连接数
+```
+sed -i 's/max_connections.*/max_connections = 120/g' /data/zabbix/postgresql/data/postgresql.conf
+docker rm -f  timescaledb
+docker-compose -f /data/zabbix/docker-compose.yaml up -d
+```
+或者下载配置文件挂载
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/docker_zabbix_server-timescaledb/postgresql.conf -o /data/zabbix/postgresql.conf
 ```
 这里会执行sql,参考[zabbix文档](https://www.zabbix.com/documentation/4.2/manual/appendix/install/db_scripts)
 ```
@@ -95,6 +113,14 @@ mkdir /data/elasticsearch/{data,logs} -p
 chown -R 1000.1000 /data/elasticsearch/
 ```
 我整理了[索引文件](https://github.com/marksugar/zabbix-complete-works/tree/master/elasticsearch/6.1.4)，**执行创建索引**即可,你也可以参考[官网文档]( https://www.zabbix.com/documentation/devel/manual/appendix/install/elastic_search_setup)
+
+你也可以执行这里的命令快速使用
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/elasticsearch |bash
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/elasticsearch-pipeline | bash
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/elasticsearch-template | bash
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/elasticsearch_template | bash
+```
 
 正常情况下你将看到如下信息：
 ```
