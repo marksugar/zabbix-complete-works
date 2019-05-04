@@ -8,9 +8,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /data/zabbix/postgresql/data:/var/lib/postgresql/data:rw
-      - /data/zabbix/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+#      - /data/zabbix/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     user: root
     stop_grace_period: 1m
+#    command: sed -i 's/max_connections.*/max_connections = 120/g' /var/lib/postgresql/data/postgresql.conf
     environment:
      - POSTGRES_USER=zabbix
      - POSTGRES_PASSWORD=abc123
