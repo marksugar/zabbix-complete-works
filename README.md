@@ -19,7 +19,6 @@
 
 * [zabbix-agent](#---Agent安装)
 * [zabbix-server](#---server安装)
-  * [elasticsearch](#-elasticsearch)
 * [自动发现](#---自动发现)
 
 如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章
