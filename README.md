@@ -65,7 +65,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/doc
 
 
 快速部署脚本
-- zabbix+timescaledb+elasticsearch
+- zabbix+timescaledb+elasticsearch (推荐)
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh|bash
 ```
@@ -73,8 +73,10 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_mysqldb_es.sh|bash
 ```
-- zabbix+timescaledb
-
+- zabbix+timescaledb (推荐)
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb.sh|bash
+```
 部署细节见[describe.md](https://github.com/marksugar/zabbix-complete-works/blob/master/describe.md)
 
 
