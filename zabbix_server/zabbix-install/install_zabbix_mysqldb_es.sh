@@ -25,6 +25,7 @@
 		docker-compose pull
 	}
 	elasticsearch_install(){
+		echo "vm.max_map_count=655355" >> /etc/sysctl.conf && sysctl -p
 		mkdir /data/zabbix/elasticsearch/{data,logs} -p
 		chown -R 1000.1000 /data/zabbix/elasticsearch/
 		docker-compose  up -d elasticsearch

@@ -27,18 +27,19 @@
 		mkdir /data/zabbix/postgresql/data -p 
 		chown -R 70 /data/zabbix/postgresql/data
 		docker-compose  up -d timescaledb
-		sleep 30
+		countdown 30 "In order to timescaledb startup"
 		sed -i 's/max_connections.*/max_connections = 120/g' /data/zabbix/postgresql/data/postgresql.conf
 		docker rm -f  timescaledb
 		docker-compose  up -d timescaledb
 	}
   
 	elasticsearch_install(){
+		echo "vm.max_map_count=655355" >> /etc/sysctl.conf && sysctl -p
 		mkdir /data/zabbix/elasticsearch/{data,logs} -p
 		chown -R 1000.1000 /data/zabbix/elasticsearch/
 		docker-compose  up -d elasticsearch
 		countdown 30 "In order to Elasticsearch startup"
-		if [ `ss -lt|grep 5432|wc -l` = 1 ];then 
+		if [ `ss -lt|grep 9200|wc -l` = 1 ];then 
 			echo -e "start configure elasticsearch index\n"
 			curl -sLk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/elasticsearch |bash
 			countdown 3 "In order to Elasticsearch index pipeline"
