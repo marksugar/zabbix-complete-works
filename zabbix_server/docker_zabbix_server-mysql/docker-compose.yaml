@@ -2,7 +2,7 @@ version: '3.5'
 services:
   mariadb:
     image: mariadb:10.1.39
-    container_name: mysql
+    container_name: mariadb
     privileged: true
     restart: always
     network_mode: "host"

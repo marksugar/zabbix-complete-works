@@ -13,6 +13,8 @@ services:
     environment:
      - POSTGRES_USER=zabbix
      - POSTGRES_PASSWORD=abc123
+     - TS_TUNE_MEMORY=6GB
+     - TS_TUNE_NUM_CPUS=3     
     logging:
       driver: "json-file"
       options:
