@@ -53,6 +53,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 > 你需要指定server ip，`base  -s local IPADDR`
 
 *docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*。或者使用docker部署脚本
+- 注意：如果已经安装了docker，运行此脚本会删除，同时删除镜像
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/docker_init.sh|bash
 ```
