@@ -74,8 +74,9 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb.sh|bash
 ```
-部署细节见[describe.md](https://github.com/marksugar/zabbix-complete-works/blob/master/describe.md)
+部署细节见[describe.md](https://github.com/marksugar/zabbix-complete-works/blob/master/describe.md)，我在我的博客也做了说明[linuxea:zabbix4.2新功能之TimescaleDB数据源测试](https://www.linuxea.com/2385.html)
 
+这里还有一个[timewait优化脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/zabbix-timewait.sh),你或许可以试试
 
 ## -- **自动发现**
 
