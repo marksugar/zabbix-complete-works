@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   timescaledb:
-    image: timescale/timescaledb:latest-pg11-oss
+    image: timescale/timescaledb:latest-pg11
     container_name: timescaledb
     restart: always
     network_mode: "host"
@@ -18,9 +18,10 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "1G"
+        max-size: "128M"
+        
   zabbix-server:
-    image: zabbix/zabbix-server-pgsql:alpine-4.2-latest
+    image: zabbix/zabbix-server-pgsql:alpine-4.4-latest
     container_name: zabbix-server-pgsql
     restart: always
     network_mode: "host"
@@ -46,7 +47,7 @@ services:
      - POSTGRES_PASSWORD=abc123
      - DebugLevel=3
      - HistoryStorageDateIndex=1
-     #  zabbix_server configure
+ 
      - ZBX_CACHESIZE=1024M
      - ZBX_CACHEUPDATEFREQUENCY=60
      - ZBX_STARTDBSYNCERS=4
@@ -92,9 +93,9 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "1G"
+        max-size: "128M"
   zabbix-web-nginx-pgsql:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-4.2-latest
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-4.4-latest
     container_name: zabbix-web-nginx-pgsql
     restart: always
     network_mode: "host"
@@ -113,7 +114,7 @@ services:
      - /etc/localtime:/etc/localtime:ro
      - /etc/timezone:/etc/timezone:ro
      - /data/zabbix/zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
-     - /data/zabbix/graphfont.ttf:/usr/share/zabbix/fonts/graphfont.ttf
+     - /data/zabbix/graphfont.ttf:/usr/share/zabbix/assets/fonts/DejaVuSans.ttf
     deploy:
      resources:
       limits:
@@ -137,4 +138,4 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "1G"
+        max-size: "128M"

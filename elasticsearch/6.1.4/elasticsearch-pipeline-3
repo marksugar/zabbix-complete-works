@@ -1,0 +1,85 @@
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/uint-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "zabbix uint index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "uint-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'
+
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/dbl-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "zabbix dbl index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "dbl-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'
+
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/log-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "zabbix log index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "log-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'
+
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/text-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "zabbix text index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "text-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'
+
+
+curl -X PUT \
+ http://127.0.0.1:9200/_ingest/pipeline/str-pipeline \
+ -H 'content-type:application/json' \
+ -d '{
+  "description": "zabbix str index naming",
+  "processors": [
+    {
+      "date_index_name": {
+        "field": "clock",
+        "date_formats": ["UNIX"],
+        "index_name_prefix": "str-",
+        "date_rounding": "d"
+      }
+    }
+  ]
+}'

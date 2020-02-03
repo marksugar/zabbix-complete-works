@@ -28,6 +28,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /data/zabbix/elasticsearch/data:/usr/share/elasticsearch/data
       - /data/zabbix/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - /data/zabbix/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200"
       - "9300"
@@ -39,9 +40,10 @@ services:
       driver: "json-file"
       options:
         max-size: "1G"
+        
 
   zabbix-server:
-    image: zabbix/zabbix-server-mysql:alpine-4.2-latest
+    image: zabbix/zabbix-server-mysql:alpine-4.4-latest
     container_name: zabbix-server-mysql
     privileged: true
     restart: always
@@ -119,7 +121,7 @@ services:
 
 
   zabbix-web-nginx-mysql:
-    image: zabbix/zabbix-web-nginx-mysql:alpine-4.2-latest
+    image: zabbix/zabbix-web-nginx-mysql:alpine-4.4-latest
     container_name: zabbix-web-nginx-mysql
     restart: always
     network_mode: "host"
@@ -174,7 +176,7 @@ services:
         max-size: "1G"
 
 #  zabbix-agent:
-#    image: zabbix/zabbix-agent:alpine-4.2-latest
+#    image: zabbix/zabbix-agent:alpine-4.4-latest
 #      container_name: zabbix-agent
 #      restart: always
 #      network_mode: "host"

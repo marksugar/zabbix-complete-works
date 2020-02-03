@@ -9,9 +9,9 @@
 | ----------------|------------- | ---------------------- | ------- | --------- |--------- |
 | mysql  | 3.5 | 8.0.15  | 999    | 3306/33060      |2019/0420  |
 | docker.elastic.co  |3.5 | elasticsearch:6.1.4  | 1000    | 9200/9300     |2019/0420  |
-| zabbix-server-mysql  |3.5 |alpine-4.2-latest  | 100/1000     | 10051    |2019/04/20  |
-| zabbix-web-nginx-mysql  |3.5 |alpine-4.2-latest  | 100/1000/101    | 80     |2019/0420  |
-| timescaledb | 3.5| timescaledb:latest-pg11-oss | 70|5432 |2019/05/03 |
+| zabbix-server-mysql  |3.5 |alpine-4.4-latest  | 100/1000     | 10051    |2020/02/03  |
+| zabbix-web-nginx-mysql  |3.5 |alpine-4.4-latest  | 100/1000/101    | 80     |2020/02/03  |
+| timescaledb | 3.5| timescale/timescaledb:latest-pg11 | 70|5432 |2020/02/03 |
 
 *note*
 
@@ -60,23 +60,36 @@ curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/doc
 
 ## -- **Server安装**
 
+zabbix在2019的早些版本实验性[支持timescaledb](https://blog.zabbix.com/zabbix-time-series-data-and-timescaledb/6642/)，在2020的4.4版本已经官方支持。管家是很大的亮点，他可以减少你对数据切割的必要。如果你是小规模存储，并且你也了解PostgreSQL，那么我强烈推荐使用zabbix+timescaledb。
 
-关于zabbix server分为mysql和timescaledb，但是都启用了elasticsearch
+如果在面对大规模存储长久的数据，还是推荐elasticsearch，但是你要解决单个数据随着时间而变大，查询变慢的问题。毫无疑问，zabbix+elasticsearch非常有研究价值。期待官网支持更新的版本。
 
 
 快速部署脚本
 
-- zabbix+mysqldb+elasticsearch (适用于大规模)
-```
-curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_mysqldb_es.sh|bash
-```
-- zabbix+timescaledb (适用于小规模),你仍然可以尝试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行部署
+- zabbix+timescaledb (推荐方式)。在我与zabbix官方的留言中，zabbix官网不建议使用zabbix+timescaledb+elasticsearch，任选其一即可。当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
+
+正式部署zabbix+timescaledb：
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb.sh|bash
 ```
 部署细节见[describe.md](https://github.com/marksugar/zabbix-complete-works/blob/master/describe.md)，我在我的博客也做了说明[linuxea:zabbix4.2新功能之TimescaleDB数据源测试](https://www.linuxea.com/2385.html)
 
 这里还有一个[timewait优化脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/zabbix-timewait.sh),你或许可以试试
+
+
+- zabbix+mysqldb+elasticsearch (适用于大规模)。
+
+> 在es中的问题，你需要手动添加索引，进行滚动每天的数据，否则他会变大。我目前没有提供这方面的信息。
+
+参考[6_1-es_pipeline.sh](curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/6_1-es_pipeline.sh)。
+
+使用`curl -XGET "http://127.0.0.1:9200/_ingest/pipeline?pretty"`查看已经创建的索引旋转周期.
+
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_mysqldb_es.sh|bash
+```
+
 
 ## -- **自动发现**
 

@@ -1,0 +1,185 @@
+curl -X PUT \
+ http://127.0.0.1:9200/_template/uint_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "index_patterns": ["uint*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "long",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "long"
+            }
+         }
+      }
+   }
+}'
+
+
+curl -X PUT \
+ http://127.0.0.1:9200/_template/dbl_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "index_patterns": ["dbl*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "double",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "double"
+            }
+         }
+      }
+   }
+}'
+
+curl -X PUT \
+ http://127.0.0.1:9200/_template/log_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "index_patterns": ["log*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+
+
+curl -X PUT \
+ http://127.0.0.1:9200/_template/text_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "index_patterns": ["text*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'
+curl -X PUT \
+ http://127.0.0.1:9200/_template/str_template \
+ -H 'content-type:application/json' \
+ -d '{
+   "index_patterns": ["str*"],
+   "settings" : {
+      "index" : {
+         "number_of_replicas" : 1,
+         "number_of_shards" : 5
+      }
+   },
+   "mappings" : {
+      "values" : {
+         "properties" : {
+            "itemid" : {
+               "type" : "long"
+            },
+            "clock" : {
+               "format" : "epoch_second",
+               "type" : "date"
+            },
+            "value" : {
+               "fields" : {
+                  "analyzed" : {
+                     "index" : true,
+                     "type" : "text",
+                     "analyzer" : "standard"
+                  }
+               },
+               "index" : false,
+               "type" : "text"
+            }
+         }
+      }
+   }
+}'

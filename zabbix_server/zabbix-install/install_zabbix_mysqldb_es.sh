@@ -1,8 +1,7 @@
 #!/bin/bash
 #########################################################################
 # File Name: install_zabbix_mysql_es.sh
-# Author: LookBack
-# Email: admin#dwhd.org
+# Author: www.linuxea.com
 # Version:
 # Created Time: 2019年05月04日 星期六 17时46分39秒
 #########################################################################
@@ -28,6 +27,7 @@
 		echo "vm.max_map_count=655355" >> /etc/sysctl.conf && sysctl -p
 		mkdir /data/zabbix/elasticsearch/{data,logs} -p
 		chown -R 1000.1000 /data/zabbix/elasticsearch/
+		curl -sLk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/elasticsearch/6.1.4/conf/elasticsearch.yml -o /data/zabbix/elasticsearch/elasticsearch.yml
 		docker-compose  up -d elasticsearch
 		countdown 30 "In order to Elasticsearch startup"
 		if [ `ss -lt|grep 9200|wc -l` = 1 ];then 
