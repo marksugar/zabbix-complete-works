@@ -67,7 +67,9 @@ zabbix在2019的早些版本实验性[支持timescaledb](https://blog.zabbix.com
 
 快速部署脚本
 
-- zabbix+timescaledb (推荐方式)。在我与zabbix官方的留言中，zabbix官网不建议使用zabbix+timescaledb+elasticsearch，任选其一即可。当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
+- zabbix+timescaledb (推荐方式)。
+
+在我与zabbix官方的留言中，zabbix官网不建议使用zabbix+timescaledb+elasticsearch，任选其一即可。当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
 
 正式部署zabbix+timescaledb：
 ```
@@ -82,7 +84,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 > 在es中的问题，你需要手动添加索引，进行滚动每天的数据，否则他会变大。我目前没有提供这方面的信息。
 
-参考[6_1-es_pipeline.sh](curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/6_1-es_pipeline.sh)。
+参考[6_1-es_pipeline.sh](curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/6_1-es_pipeline.sh)
 
 使用`curl -XGET "http://127.0.0.1:9200/_ingest/pipeline?pretty"`查看已经创建的索引旋转周期.
 
