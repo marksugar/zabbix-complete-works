@@ -84,7 +84,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 > 在es中的问题，你需要手动添加索引，进行滚动每天的数据，否则他会变大。我目前没有提供这方面的信息。
 
-参考[6_1-es_pipeline.sh](curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/6_1-es_pipeline.sh)
+参考[6_1-es_pipeline.sh](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/6_1-es_pipeline.sh)
 
 使用`curl -XGET "http://127.0.0.1:9200/_ingest/pipeline?pretty"`查看已经创建的索引旋转周期.
 
