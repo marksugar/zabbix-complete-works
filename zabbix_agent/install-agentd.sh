@@ -24,10 +24,12 @@ VERSION=${VERSION:-$(awk '{print int(($3~/^[0-9]/?$3:$4))}' /etc/centos-release)
 [ -f /tmp/yum.conf ] && :>/tmp/yum.conf
 echo -e "[zabbix]\nname = Zabbix\nbaseurl = http://repo.zabbix.com/zabbix/4.0/rhel/${VERSION}/x86_64\n" >> /tmp/yum.conf     
   
-if ! which zabbix_agentd >/dev/null 2>&1;then yum -c /tmp/yum.conf install -y zabbix-agent zabbix-sender ; fi
+if ! which zabbix_agentd >/dev/null 2>&1;then 
+	yum -c /tmp/yum.conf install -y zabbix-agent zabbix-sender ;
+else 
+	mv ${zabbix_agentd_conf} ${zabbix_agentd_conf}.bak
+fi	
 
-
-mv ${zabbix_agentd_conf} ${zabbix_agentd_conf}.bak
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/Initial-package/zabbix_agent_status.tar.gz|tar xz -C /etc/zabbix/
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/Initial-package/zabbix_agentd.conf -o ${zabbix_agentd_conf}
 
