@@ -1,0 +1,1847 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-03-31T02:34:47Z</date>
+    <groups>
+        <group>
+            <name>Local_Windows_Node</name>
+        </group>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template OS Windows Discovery Performance Monitoring</template>
+            <name>Template OS Windows Discovery Performance Monitoring</name>
+            <groups>
+                <group>
+                    <name>Local_Windows_Node</name>
+                </group>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Disk</name>
+                </application>
+                <application>
+                    <name>Memory</name>
+                </application>
+                <application>
+                    <name>Network Interface</name>
+                </application>
+                <application>
+                    <name>Process</name>
+                </application>
+                <application>
+                    <name>Processor</name>
+                </application>
+                <application>
+                    <name>System</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Memory % Committed Bytes in Use</name>
+                    <key>perf_counter[&quot;\Memory\% Committed Bytes in Use&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>This measures the ratio of Committed Bytes to the Commit Limit—in other words, the amount of virtual memory in use. This indicates insufficient memory if the number is greater than 80 percent. The obvious solution for this is to add more memory.</description>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&gt;90</expression>
+                            <name>swap Memory usage exceeded 90%</name>
+                            <url>http://technet.microsoft.com/en-us/magazine/2008.08.pulse.aspx</url>
+                            <priority>WARNING</priority>
+                            <description>This measures the ratio of Committed Bytes to the Commit Limit—in other words, the amount of virtual memory in use. This indicates insufficient memory if the number is greater than 80 percent. The obvious solution for this is to add more memory.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Memory Pool Nonpaged Bytes</name>
+                    <key>perf_counter[&quot;\Memory\Pool Nonpaged Bytes&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Bytes</units>
+                    <description>This measures the size, in bytes, of the non-paged pool. This is an area of system memory for objects that cannot be written to disk but instead must remain in physical memory as long as they are allocated. There is a possible memory leak if the value is greater than 175MB (or 100MB with the /3GB switch). A typical Event ID 2019 is recorded in the system event log.</description>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Memory Pool Paged Bytes</name>
+                    <key>perf_counter[&quot;\Memory\Pool Paged Bytes&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>Bytes</units>
+                    <description>This measures the size, in bytes, of the paged pool. This is an area of system memory used for objects that can be written to disk when they are not being used. There may be a memory leak if this value is greater than 250MB (or 170MB with the /3GB switch). A typical Event ID 2020 is recorded in the system event log.</description>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>IO Data Operations/sec</name>
+                    <key>perf_counter[&quot;\Process(_Total)\IO Data Operations/sec&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>/sec</units>
+                    <description>These counters count all I/O activity generated to include file, network and device I/Os. These analyses check when processes are doing more than 1,000 I/O’s per second and flag it as a warning. These analyses are best used in correlation with other analyses such as disk analysis to determine which processes might be involved in the I/O activity.</description>
+                    <applications>
+                        <application>
+                            <name>Disk</name>
+                        </application>
+                        <application>
+                            <name>Process</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;1000</expression>
+                            <name>Process IO Data Operations/sec</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;8000</expression>
+                            <name>Process IO Data Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>IO Other Operations/sec</name>
+                    <key>perf_counter[&quot;\Process(_Total)\IO Other Operations/sec&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>/sec</units>
+                    <description>The number of input/output operations generated by a process that are neither reads nor writes, including file, network, and device I/Os. An example of this type of operation would be a control function. I/O Others directed to CONSOLE (console input object) handles are not counted.</description>
+                    <applications>
+                        <application>
+                            <name>Disk</name>
+                        </application>
+                        <application>
+                            <name>Process</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;1000</expression>
+                            <name>Process IO Other Operations/sec</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;7000</expression>
+                            <name>Process IO Other Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>IO Read Operations/sec</name>
+                    <key>perf_counter[&quot;\Process(_Total)\IO Read Operations/sec&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>/sec</units>
+                    <description>The number of read input/output operations generated by a process, including file, network, and device I/Os. I/O Reads directed to CONSOLE (console input object) handles are not counted.</description>
+                    <applications>
+                        <application>
+                            <name>Disk</name>
+                        </application>
+                        <application>
+                            <name>Process</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;1000</expression>
+                            <name>Process IO Read Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;10000</expression>
+                            <name>Process IO Read Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>IO Write Operations/sec</name>
+                    <key>perf_counter[&quot;\Process(_Total)\IO Write Operations/sec&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>/sec</units>
+                    <description>The number of write input/output operations generated by a process, including file, network, and device I/Os. I/O Writes directed to CONSOLE (console input object) handles are not counted.</description>
+                    <applications>
+                        <application>
+                            <name>Disk</name>
+                        </application>
+                        <application>
+                            <name>Process</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;1000</expression>
+                            <name>Process IO Write Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;6000</expression>
+                            <name>Process IO Write Operations/sec</name>
+                            <url>http://blogs.technet.com/b/askcore/archive/2012/03/16/windows-performance-monitor-disk-counters-explained.aspx</url>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Processor % C1 Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% C1 Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>C1 is a power saving mode in a CPU. This counter keeps track of how often the process is able to enter a power saving state when idle. So %C1 Time is the percentage of time the LP is in the C1 state and for _Total the average percentage across all LP.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % C2 Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% C2 Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>C2 is a power saving mode in a CPU, deeper than C1. This counter keeps track of how often the process is able to enter a power saving state when idle. So %C2 Time is the percentage of time the LP is in the C2 state and for _Total the average percentage across all LP.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % C3 Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% C3 Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>C3 is a power saving mode in a CPU, deeper than both C1 and C2. This counter keeps track of how often the process is able to enter a power saving state when idle. So %C3 Time is the percentage of time the LP is in the C3 state and for _Total the average percentage across all LP.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % DPC Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% DPC Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>Determines how much time the processor is spending processing DPCs. DPCs originate when the processor performs tasks requiring immediate attention, and then defers the remainder of the task to be handled at lower priority. DPCs represent further processing of client requests.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % Interrupt Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% Interrupt Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>This measures the time the processor spends receiving and servicing hardware interruptions during specific sample intervals. This counter indicates a possible hardware issue if the value is greater than 15 percent.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;30</expression>
+                            <name>Processor % Interrupt Time</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;70</expression>
+                            <name>Processor % Interrupt Time</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Processor % Maximum Frequency Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% of Maximum Frequency&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % Priority Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% Priority Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor % Privileged Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% Privileged Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>The percentage of time a thread was running in privileged mode.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>Processor ％ User Time</name>
+                    <key>perf_counter[&quot;\Processor Information(_Total)\% User Time&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>This measures the percentage of elapsed time the processor spends in user mode. If this value is high, the server is busy with the application. One possible solution here is to optimize the application that is using up the processor resources.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>% Registry Quota In Use</name>
+                    <key>perf_counter[&quot;\System\% Registry Quota In Use&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <applications>
+                        <application>
+                            <name>Memory</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(,0)}&gt;60</expression>
+                            <name>% registry Quota in Use</name>
+                            <status>DISABLED</status>
+                            <priority>WARNING</priority>
+                        </trigger>
+                        <trigger>
+                            <expression>{last(,0)}&gt;90</expression>
+                            <name>% registry Quota in Use</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Context Switches/sec</name>
+                    <key>perf_counter[&quot;\System\Context Switches/sec&quot;,300]</key>
+                    <delay>30s</delay>
+                    <history>1w</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>/sec</units>
+                    <description>Indicates that the kernel has switched the thread it is running on a processor. A context switch occurs each time a new thread runs, and each time one thread takes over from another. A large number of threads is likely to increase the number of context switches. Context switches allow multiple threads to share time slices on the processors, but they also interrupt the processor and might reduce overall system performance, especially on multiprocessor computers. You should also observe the patterns of context switches over time.</description>
+                    <applications>
+                        <application>
+                            <name>Processor</name>
+                        </application>
+                        <application>
+                            <name>System</name>
+                        </application>
+                    </applications>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{avg(600,0)}&gt;26000</expression>
+                            <name>Context Switches/sec</name>
+                            <priority>WARNING</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>LogicalDisk Discovery</name>
+                    <key>windowsldiskperf.discovery</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#DISKNUMLET}</macro>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <description>Discovers logical disks (e.g. partitions C:\, E:\, etc.).</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} % Disk Read Time</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Read Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} % Disk Time</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} % Disk Write Time</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Write Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Bytes/Read</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Read&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Bytes/Transfer</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Transfer&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Bytes/Write</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Write&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Read Queue Length</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Read Queue Length&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Write Queue Length</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Write Queue Length&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Bytes/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Read Bytes/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Read Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Reads/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Reads/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Write Bytes/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Write Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Writes/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Writes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Split IO/sec</name>
+                            <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Split IO/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} % Disk Time</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Read Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\% Disk Write Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Bytes/Operation</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Read&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Transfer&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Write&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Avg. Disk Queue Length</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Read Queue Length&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Avg. Disk Write Queue Length&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Disk Bytes/sec</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Read Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Disk Write Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>LogicalDisk {#DISKNUMLET} Split IO/sec</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\LogicalDisk({#DISKNUMLET})\Split IO/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Network Interface Discovery</name>
+                    <key>windowsnetworkperf.discovery</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#INTERFACE}</macro>
+                                <value>@Network-discovery</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <description>Discovers network interfaces.&#13;
+&#13;
+The regex 	&#13;
+1	» 	(Loopback|Miniport|Microsoft|RAS|QoS|WFP|Tunneling|isatap)	[Result is FALSE]&#13;
+&#13;
+will filter logical interfaces created by the Windows OS.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Network Interface {#INTERFACE} Packets Outbound Discarded</name>
+                            <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Outbound Discarded&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Network Interface</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Network Interface {#INTERFACE} Packets Outbound Errors</name>
+                            <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Outbound Errors&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Network Interface</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Network Interface {#INTERFACE} Packets Received Discarded</name>
+                            <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Received Discarded&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Network Interface</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Network Interface {#INTERFACE} Packets Received Errors</name>
+                            <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Received Errors&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Network Interface</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Network Interface {#INTERFACE} Discards and Errors</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Outbound Discarded&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Outbound Errors&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Received Discarded&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>3</sortorder>
+                                    <color>C800C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Network Interface({#INTERFACE})\Packets Received Errors&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>PhysicalDisk Discovery</name>
+                    <key>windowspdiskperf.discovery</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#DISKNUMLET}</macro>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <description>Discovers Physical Disks (e.g. disks, RAID arrays, etc.).</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} % Disk Read Time</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Read Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} % Disk Time</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} % Disk Write Time</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Write Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Bytes/Read</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Read&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Bytes/Transfer</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Transfer&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Bytes/Write</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Write&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Read Queue Length</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Read Queue Length&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Write Queue Length</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Write Queue Length&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Bytes/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Read Bytes/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Read Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Reads/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Reads/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Transfers/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Transfers/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Write Bytes/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Write Bytes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>Bytes/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Writes/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Writes/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Split IO/sec</name>
+                            <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Split IO/sec&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>/sec</units>
+                            <applications>
+                                <application>
+                                    <name>Disk</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} % Disk Time</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Read Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\% Disk Write Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Bytes/Operation</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Read&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Transfer&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Bytes/Write&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Avg. Disk Queue Length</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Read Queue Length&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Avg. Disk Write Queue Length&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Bytes/sec</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Read Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Write Bytes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Disk Operations/sec</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Reads/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Transfers/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Disk Writes/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>PhysicalDisk {#DISKNUMLET} Split IO/sec</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\PhysicalDisk({#DISKNUMLET})\Split IO/sec&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Processor Discovery</name>
+                    <key>windowsprocessorperf.discovery</key>
+                    <delay>1h</delay>
+                    <description>Discovers processors</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % C1 Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C1 Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % C2 Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C2 Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % C3 Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C3 Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % DPC Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% DPC Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Idle Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Idle Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last()}&lt;15</expression>
+                                    <name>Processor {#PROCESSOR} % Idle Time</name>
+                                    <url>https://technet.microsoft.com/en-us/library/cc958276.aspx</url>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Interrupt Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Interrupt Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{avg(600,0)}&gt;30</expression>
+                                    <name>Processor {#PROCESSOR} % Interrupt Time</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{avg(600,0)}&gt;50</expression>
+                                    <name>Processor {#PROCESSOR} % Interrupt Time</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % of Maximum Frequency</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% of Maximum Frequency&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Performance Limit</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Performance Limit&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Priority Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Priority Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Privileged Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Privileged Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % Processor Performance</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Processor Performance&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Processor {#PROCESSOR} % User Time</name>
+                            <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% User Time&quot;,300]</key>
+                            <delay>30s</delay>
+                            <value_type>FLOAT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Processor</name>
+                                </application>
+                            </applications>
+                            <request_method>POST</request_method>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>Processor {#PROCESSOR} % Frequency and Performance</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% of Maximum Frequency&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Performance Limit&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Processor Performance&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>Processor {#PROCESSOR} % Low-Power Idle State Time</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C1 Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C2 Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% C3 Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <name>Processor {#PROCESSOR} % Utilization</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>00C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% DPC Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>FF3333</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Idle Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>0000C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Interrupt Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>3</sortorder>
+                                    <color>C800C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Priority Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>4</sortorder>
+                                    <color>00C8C8</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% Privileged Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>5</sortorder>
+                                    <color>C8C800</color>
+                                    <item>
+                                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                                        <key>perf_counter[&quot;\Processor Information({#PROCESSOR})\% User Time&quot;,300]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                    <request_method>POST</request_method>
+                </discovery_rule>
+            </discovery_rules>
+            <screens>
+                <screen>
+                    <name>Disk Performance Counters</name>
+                    <hsize>1</hsize>
+                    <vsize>2</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Processes IO Operations/sec</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+                <screen>
+                    <name>Memory Performance Counters</name>
+                    <hsize>1</hsize>
+                    <vsize>2</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Memory % Committed Bytes in Use</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Memory Pool Paged and Nonpaged Bytes</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+                <screen>
+                    <name>Network Performance Counters</name>
+                    <hsize>1</hsize>
+                    <vsize>1</vsize>
+                </screen>
+                <screen>
+                    <name>Processor Performance Counters</name>
+                    <hsize>1</hsize>
+                    <vsize>1</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>Processor _Total Detailed % Utilization</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+                <screen>
+                    <name>System Performance Counters</name>
+                    <hsize>1</hsize>
+                    <vsize>2</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>System Context Switches/sec</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>System % Registry Quota In Use</name>
+                                <host>Template OS Windows Discovery Performance Monitoring</host>
+                            </resource>
+                            <width>900</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+            </screens>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>Memory % Committed Bytes in Use</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF3333</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Memory\% Committed Bytes in Use&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Memory Pool Paged and Nonpaged Bytes</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF6666</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Memory\Pool Nonpaged Bytes&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00C800</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Memory\Pool Paged Bytes&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Processes IO Operations/sec</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF3333</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Process(_Total)\IO Data Operations/sec&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00C800</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Process(_Total)\IO Other Operations/sec&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>0000C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Process(_Total)\IO Read Operations/sec&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>C800C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Process(_Total)\IO Write Operations/sec&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Processor _Total Detailed % Utilization</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF3333</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% C1 Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>00C800</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% C2 Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>0000C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% C3 Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>C800C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% DPC Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>00C8C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% Interrupt Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>C8C800</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% of Maximum Frequency&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>6</sortorder>
+                    <color>C8C8C8</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% Priority Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>7</sortorder>
+                    <color>960000</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% Privileged Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>8</sortorder>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\Processor Information(_Total)\% User Time&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>System % Registry Quota In Use</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF3333</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\System\% Registry Quota In Use&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>System Context Switches/sec</name>
+            <graph_items>
+                <graph_item>
+                    <color>FF3333</color>
+                    <item>
+                        <host>Template OS Windows Discovery Performance Monitoring</host>
+                        <key>perf_counter[&quot;\System\Context Switches/sec&quot;,300]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
