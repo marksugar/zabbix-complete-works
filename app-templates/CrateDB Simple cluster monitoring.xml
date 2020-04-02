@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-04-02T09:02:37Z</date>
+    <groups>
+        <group>
+            <name>Simple monitoring marksugar</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>CrateDB Simple cluster monitoring</template>
+            <name>CrateDB Simple cluster monitoring</name>
+            <groups>
+                <group>
+                    <name>Simple monitoring marksugar</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>clust status</name>
+                </application>
+                <application>
+                    <name>jobs_metrics</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>集群成员总数</name>
+                    <key>CRATE_CLUST_NUM</key>
+                    <applications>
+                        <application>
+                            <name>clust status</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>COPY</name>
+                    <key>CRATE_COPY</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>DDL</name>
+                    <key>CRATE_DDL</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>DELETE</name>
+                    <key>CRATE_DELETE</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>INSERT</name>
+                    <key>CRATE_INSERT</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>MANAGEMENT</name>
+                    <key>CRATE_MANAGEMENT</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>集群未分配或启动的分片数</name>
+                    <key>CRATE_MISSING_SHARDS</key>
+                    <value_type>FLOAT</value_type>
+                    <applications>
+                        <application>
+                            <name>clust status</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>SELECT</name>
+                    <key>CRATE_SELECT</key>
+                    <applications>
+                        <application>
+                            <name>jobs_metrics</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>集群健康状态</name>
+                    <key>CRATE_STATUS</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <applications>
+                        <application>
+                            <name>clust status</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{regexp(GREEN)}&lt;&gt;1</expression>
+                            <name>{HOST.NAME} CrateDB非GREEN状态</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>Cratedb_jobs_metrics</name>
+            <show_work_period>NO</show_work_period>
+            <show_triggers>NO</show_triggers>
+            <type>STACKED</type>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_COPY</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_DDL</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_DELETE</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_INSERT</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_MANAGEMENT</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_SELECT</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>Cratedb_status</name>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_CLUST_NUM</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>CrateDB Simple cluster monitoring</host>
+                        <key>CRATE_MISSING_SHARDS</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
