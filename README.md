@@ -38,7 +38,9 @@
 
 ![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `应用监控`
 
+* [mariadb主从监控](#mariadb主从监控) 
 * [mariadb-galera](#mariadb-galera)
+**mariadb监控分为主从监控，galera监控 ，和mariadb监控的性能监控，他们分别在不同的模板和两个脚本中**
 * [nginx和php-fpm](#nginx和php-fpm)
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
@@ -278,9 +280,58 @@ UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp2.png)
 
+## mariadb主从监控
+
+如果你是主从结构，你需要导入Mariadb_M-S_Thread.xml模板，并且使用app-scripts中的IO_SQL.sh脚本配合使用。脚本内容如下：
+
+```
+#/bin/bash
+# https://github.com/marksugar/zabbix-complete-works
+DEF="--defaults-file=/etc/zabbix/zabbixmy.conf"
+MYSQL='/usr/local/mariadb/bin/mysql'
+ARGS=1 
+if [ $# -ne "$ARGS" ];then 
+    echo "Please input one arguement:" 
+fi
+case $1 in
+        Slave_IO_Running)
+        result=`${MYSQL} $DEF -e "show slave status\G"|awk '/Slave_IO_Running/{print $2}'`
+        echo $result
+        ;;
+        Slave_SQL_Running)
+        result=`${MYSQL} $DEF -e "show slave status\G"|awk '/Slave_SQL_Running/{print $2}'`
+        echo $result
+        ;;
+        *)
+        echo "Usage:$0(Slave_SQL_Running|Slave_IO_Running)"
+        ;;
+esac
+```
+
+分别是监控两个进程
+
+```
+maria.IO_SQL[Slave_IO_Running]
+maria.IO_SQL[Slave_SQL_Running]
+```
+
+- 授权sql
+
+```
+GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
+```
+
+- UserParameter
+
+```
+echo "UserParameter=maria.IO_SQL[*],/etc/zabbix/scripts/IO_SQL.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
+```
+
+当然，除此之外，想监控更多，你还要导入[Mariadb_monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/Mariadb_monitoring.xml)和调用app-scripts中的mariadb.sh脚本来监控其他的项目，比如innodb的情况等。
+
 ## mariadb-galera
 
-这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构。如果你是主从结构，你需要导入Mariadb_M-S_Thread.xml模板，并且使用app-scripts中的IO_SQL.sh脚本配合使用。
+这是一个非常简单的mariadb-galera-clster监控项目，它不适用于一般的主从结构。
 
 - 授权sql
 
@@ -293,11 +344,4 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 ```
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
-你需要导入mariadb-galera-cluster-monitor.xml文件，如果你要更详细的信息，你还需要导入Mariadb_monitoring.xml。但是Mariadb_monitoring不在和mariadb-galera-cluster-monitor是一个。
-- Items
-
-![mariadb-gra](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra1.png)
-
-- Trigger
-
-![mariadb-gra2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra2.png)
+app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galera-cluster-monitor.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/mariadb-galera-cluster-monitor.xml)文件，如果你要更详细的信息，你仍然需要导入[Mariadb_monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/Mariadb_monitoring.xml)。而这些都调用app-scripts中的mariadb.sh
