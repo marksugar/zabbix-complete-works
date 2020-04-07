@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-04-07T11:58:05Z</date>
+    <groups>
+        <group>
+            <name>Simple monitoring marksugar</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>mariadb galera cluster monitor</template>
+            <name>mariadb galera cluster monitor</name>
+            <groups>
+                <group>
+                    <name>Simple monitoring marksugar</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <name>wsrep_cluster_size集群成员</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>maria.db[wsrep_cluster_size]</key>
+                    <delay>30s</delay>
+                    <history>15d</history>
+                    <trends>30d</trends>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{last(1m)}&lt;&gt;3</expression>
+                            <name>{HOST.NAME}  Mariadb Cluster chenage</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>wsrep_cluster_status集群状态</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>maria.db[wsrep_cluster_status]</key>
+                    <delay>30s</delay>
+                    <history>15d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{regexp(Primary)}&lt;&gt;1</expression>
+                            <name>{HOST.NAME} cluster_status no-Primary</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>wsrep_local_recv_queue_avg平均请求队列长度</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>maria.db[wsrep_local_recv_queue_avg]</key>
+                    <delay>30s</delay>
+                    <history>15d</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>wsrep_local_send_queue_avg上次查询之后的平均发送队列长度</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>maria.db[wsrep_local_send_queue_avg]</key>
+                    <delay>30s</delay>
+                    <history>15d</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <request_method>POST</request_method>
+                </item>
+                <item>
+                    <name>wsrep_ready</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>maria.db[wsrep_ready]</key>
+                    <delay>30s</delay>
+                    <history>15d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <request_method>POST</request_method>
+                    <triggers>
+                        <trigger>
+                            <expression>{regexp(ON)}&lt;&gt;1</expression>
+                            <name>{HOST.NAME} Node is not ready</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <name>Mariadb Galera Cluster monitor</name>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>mariadb galera cluster monitor</host>
+                        <key>maria.db[wsrep_cluster_size]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>mariadb galera cluster monitor</host>
+                        <key>maria.db[wsrep_local_recv_queue_avg]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>mariadb galera cluster monitor</host>
+                        <key>maria.db[wsrep_local_send_queue_avg]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>

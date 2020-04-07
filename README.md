@@ -280,7 +280,7 @@ UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 
 ## mariadb-galera
 
-这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构
+这是一个非常简单的mariadb-galera-clster监控项目，它并不适用于一般的主从结构。如果你是主从结构，你需要导入Mariadb_M-S_Thread.xml模板，并且使用app-scripts中的IO_SQL.sh脚本配合使用。
 
 - 授权sql
 
@@ -293,7 +293,7 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 ```
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
-
+你需要导入mariadb-galera-cluster-monitor.xml文件，如果你要更详细的信息，你还需要导入Mariadb_monitoring.xml。但是Mariadb_monitoring不在和mariadb-galera-cluster-monitor是一个。
 - Items
 
 ![mariadb-gra](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/mariadb-gra1.png)
