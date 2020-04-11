@@ -42,6 +42,8 @@
 * [mariadb-galera](#mariadb-galera)
 **mariadb监控分为主从监控，galera监控 ，和mariadb监控的性能监控，他们分别在不同的模板和两个脚本中**
 * [nginx和php-fpm](#nginx和php-fpm)
+* [redis](#redis)
+* [createdb](#createdb)
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
@@ -345,3 +347,60 @@ GRANT SELECT ON *.* TO 'zabbix'@'127.0.0.1' IDENTIFIED BY 'password';
 echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabbix/zabbix_agentd.conf
 ```
 app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galera-cluster-monitor.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/mariadb-galera-cluster-monitor.xml)文件，如果你要更详细的信息，你仍然需要导入[Mariadb_monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/Mariadb_monitoring.xml)。而这些都调用app-scripts中的mariadb.sh
+
+## redis
+
+对于redis仅仅只是做了一些简单的监控，不包含主从或者集群。如下图：
+
+![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/redis/redisdb5.png)
+
+![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/redis/redisdb4.png)
+
+脚本在[app-scripts/redis][https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/redis]下，通过deploy-redis.sh进行部署，细节如下:
+
+```
+read -p "输入redis密码:" repassword
+mkdir -p /etc/zabbix/scripts/
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/redis.sh -o /etc/zabbix/scripts/redis.sh
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/redis_discovery.py -o /etc/zabbix/scripts/redis_discovery.py
+sed -i 's@#Include=/etc/zabbix/zabbix_agentd.d/*.conf@Include=/etc/zabbix/zabbix_agentd.d/*.conf@g' /etc/zabbix/zabbix_agentd.conf
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/redis.conf -o /etc/zabbix/zabbix_agentd.d/redis.conf
+chmod +x /etc/zabbix/scripts/redis*
+sed -i "s/mima/$repassword/g" /etc/zabbix/scripts/redis.sh /etc/zabbix/scripts/redis_discovery.py /etc/zabbix/zabbix_agentd.d/redis.conf
+grep Timeout=30 /etc/zabbix/zabbix_agentd.conf || echo "Timeout=30" >> /etc/zabbix/zabbix_agentd.conf
+systemctl restart zabbix-agent.service
+```
+
+快速部署如下：
+
+```
+curl -Lks https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/deploy-redis.sh|bash
+```
+
+## createdb
+
+createdb本身不对zabbix提取不友好，而对prometheus友好。我只是简单的做了集群的监控，我怀疑我的“增删改查”几个项有问题。暂且如此
+
+模板位于[app-templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下的[CrateDB Simple cluster monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/CrateDB Simple cluster monitoring.xml)
+
+createdb.conf如下：
+
+```
+#集群状态GREEN : 
+UserParameter=CRATE_STATUS,curl -sXPOST localhost:4200/_sql -d '{"stmt":"SELECT (SELECT health FROM sys.health ORDER BY severity DESC LIMIT 1) AS health, (SELECT sum(missing_shards) FROM sys.health) AS missing_shards, (SELECT count(*) FROM sys.nodes) AS num_nodes;"}' |awk -F\" '{print $12}'
+
+#集群成员数量:
+UserParameter=CRATE_CLUST_NUM,curl -sXPOST localhost:4200/_sql -d '{"stmt":"SELECT (SELECT health FROM sys.health ORDER BY severity DESC LIMIT 1) AS health, (SELECT sum(missing_shards) FROM sys.health) AS missing_shards, (SELECT count(*) FROM sys.nodes) AS num_nodes;"}' |python -m json.tool|awk  'FNR==13{print $1}'
+
+#集群分片，为0正常 未分配或启动的分片数
+UserParameter=CRATE_MISSING_SHARDS,curl -sXPOST localhost:4200/_sql -d '{"stmt":"SELECT (SELECT health FROM sys.health ORDER BY severity DESC LIMIT 1) AS health, (SELECT sum(missing_shards) FROM sys.health) AS missing_shards, (SELECT count(*) FROM sys.nodes) AS num_nodes;"}' |awk -F\, '{print $5}'
+
+#增删改查
+UserParameter=CRATE_INSERT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep INSERT|wc -l
+UserParameter=CRATE_SELECT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep SELECT|wc -l
+UserParameter=CRATE_DELETE,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep DELETE|wc -l
+UserParameter=CRATE_COPY,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep COPY|wc -l
+UserParameter=CRATE_DDL,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep DDL|wc -l
+UserParameter=CRATE_MANAGEMENT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep MANAGEMENT|wc -l
+```
+
