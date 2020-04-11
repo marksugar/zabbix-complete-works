@@ -356,7 +356,7 @@ app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galer
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/redis/redisdb4.png)
 
-脚本在[app-scripts/redis][https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/redis]下，通过deploy-redis.sh进行部署，细节如下:
+脚本在[app-scripts/redis](https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/redis)下，通过deploy-redis.sh进行部署，细节如下:
 
 ```
 read -p "输入redis密码:" repassword
@@ -377,13 +377,13 @@ systemctl restart zabbix-agent.service
 curl -Lks https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/deploy-redis.sh|bash
 ```
 
-## createdb
+## cratedb
 
 createdb本身不对zabbix提取不友好，而对prometheus友好。我只是简单的做了集群的监控，我怀疑我的“增删改查”几个项有问题。暂且如此
 
 模板位于[app-templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下的[CrateDB Simple cluster monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/CrateDB Simple cluster monitoring.xml)
 
-createdb.conf如下：
+cratedb.conf如下：
 
 ```
 #集群状态GREEN : 
@@ -402,5 +402,11 @@ UserParameter=CRATE_DELETE,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select 
 UserParameter=CRATE_COPY,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep COPY|wc -l
 UserParameter=CRATE_DDL,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep DDL|wc -l
 UserParameter=CRATE_MANAGEMENT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"select node,classification FROM sys.jobs_metrics;"}'    |python -m json.tool|grep MANAGEMENT|wc -l
+```
+
+下载cratedb.conf
+
+```
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/cratedb/cratedb.conf -o /etc/zabbix/zabbix_agentd.d/cratedb.conf
 ```
 
