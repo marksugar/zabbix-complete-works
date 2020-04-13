@@ -44,7 +44,7 @@
 * [nginx和php-fpm](#nginx和php-fpm)
 * [Redis](#Redis)
 * [CrateDB](#CrateDB)
-* [ActiveMQ]()(#ActiveMQ)
+* [ActiveMQ](#ActiveMQ)
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
@@ -415,6 +415,8 @@ UserParameter=CRATE_MANAGEMENT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"sel
 ```
 curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/cratedb/cratedb.conf -o /etc/zabbix/zabbix_agentd.d/cratedb.conf
 ```
+
+
 
 ##ActiveMQ
 
