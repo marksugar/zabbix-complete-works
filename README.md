@@ -111,6 +111,8 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 ## authorized_keys
 
+- Templates Name: MySysOps_Templates.xml
+
 这需要sudo权限
 ```
 zabbix ALL=(root)NOPASSWD:/usr/bin/cksum /root/.ssh/authorized_keys
@@ -158,6 +160,8 @@ UserParameter=OOM_stats,sudo awk '/kill|OOM|killer/{print $0}' /var/log/messages
 
 ## iptables
 
+- Templates Name: MySysOps_Templates.xml
+
 我仍然使用了及其简单的方式来监控iptables变化，但是你需要注意，这个变化的报警的时间非常短
 - UserParameter
 ```
@@ -178,7 +182,10 @@ zabbix ALL=(root)NOPASSWD:/usr/sbin/iptables,/usr/bin/cksum /etc/sysconfig/iptab
 ![iptables2](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/iptables2.png)
 ## 磁盘io
 
+- Templates Name: MySysOps_Templates.xml
+
 在这里下载perl脚本。并且要给755权限
+
 - UserParameter
 ```
 UserParameter=discovery.disks.iostats,/etc/zabbix/scripts/disk.pl
@@ -212,6 +219,9 @@ UserParameter=custom.vfs.dev.write.ms[*],cat /proc/diskstats | grep $1 | head -1
 ```
 
 ## nginx和php-fpm
+
+- Templates Name: Template_Nginx_Status.xml
+- Templates Name: Template_PHP-FPM_status.xml
 
 准备
 
@@ -263,6 +273,8 @@ UserParameter=php-fpm.status[*],/usr/bin/curl -s "http://127.0.0.1:40080/php-fpm
 
 我用了一种简单的方式来进行监控，在我看来越简单越好用。
 
+- Templates Name: MySysOps_Templates.xml
+
 需要提醒的是，我存放在计划任务中执行的统计信息，存放在/tmp/下，而后使用脚本去抓取。计划任务默认最小粒度1分钟一次
 
 ```
@@ -286,6 +298,8 @@ UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 ## MariaDB主从监控
 
 如果你是主从结构，你需要导入Mariadb_M-S_Thread.xml模板，并且使用app-scripts中的IO_SQL.sh脚本配合使用。脚本内容如下：
+
+- Templates Name:  Mariadb_M-S_Thread.xml
 
 ```
 #/bin/bash
@@ -336,6 +350,8 @@ echo "UserParameter=maria.IO_SQL[*],/etc/zabbix/scripts/IO_SQL.sh \$1" >> /etc/z
 
 这是一个非常简单的mariadb-galera-clster监控项目，它不适用于一般的主从结构。
 
+- Templates Name: mariadb-galera-cluster-monitor.xml
+
 - 授权sql
 
 ```
@@ -352,6 +368,8 @@ app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galer
 ## Redis
 
 对于redis仅仅只是做了一些简单的监控，不包含主从或者集群。如下图：
+
+- Templates Name: redis-info-status.xml 
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/redis/redisdb5.png)
 
@@ -386,6 +404,8 @@ curl -Lk https://raw.githubusercontent.com/marksugar/Maops/master/redis-cli/inst
 ## CrateDB
 
 createdb本身不对zabbix提取不友好，而对prometheus友好。我只是简单的做了集群的监控，我怀疑我的“增删改查”几个项有问题。暂且如此
+
+- Templates Name: CrateDB Simple cluster monitoring.xml
 
 模板位于[app-templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下的CrateDB Simple cluster monitoring.xml
 
@@ -422,7 +442,9 @@ curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/mast
 
 使用自动发现队列，监控队列的值。
 
-通过url http://127.0.0.1:8161/admin/xml/queues.jsp抓取queue，获取值达到监控的目的
+通过url `http://127.0.0.1:8161/admin/xml/queues.jsp`抓取queue，获取值达到监控的目的
+
+- Templates Name: activemq-queues-monitoring.xml。
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/activemq/activemq1.png)
 
@@ -453,6 +475,7 @@ activemq.conf
 
 ```
 UserParameter=discovery.activemq.queues,/etc/zabbix/scripts/Queues_Name.py
+UserParameter=discovery.activemq.status,curl -s -uadmin:admin http://127.0.0.1:8161/api/jolokia/ | python -m json.tool|awk '/status/{print $2}'|awk  -F\, '{print $1}'
 UserParameter=activemq.status[*],curl   -s -uadmin:admin  http://127.0.0.1:8161/admin/xml/queues.jsp |grep -v "^$"| grep  -A 5 """<queue name=\"$1\">"""|awk -F \"  '/$2/{print $$2}'
 ```
 

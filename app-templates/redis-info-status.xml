@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-04-13T03:17:22Z</date>
+    <groups>
+        <group>
+            <name>Simple monitoring marksugar</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>redis info status</template>
+            <name>redis info status</name>
+            <groups>
+                <group>
+                    <name>Simple monitoring marksugar</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>内存指标</name>
+                </application>
+                <application>
+                    <name>基本活动指标</name>
+                </application>
+                <application>
+                    <name>性能指标</name>
+                </application>
+                <application>
+                    <name>持久性指标</name>
+                </application>
+                <application>
+                    <name>错误指标</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>缓存命中率</name>
+                    <key>redis.pm[HitRate]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>keyspace_hits / (keyspace_hits + keyspace_misses)&#13;
+使用Redis作为缓存时，监视缓存命中率可以告诉您缓存是否被有效使用。命中率低意味着客户端正在寻找不再存在（Redis内存中）的Key值。&#13;
+Redis不直接提供命中率指标。我们仍然可以像这样计算：&#13;
+HitRate=keyspace_hits/(keyspace_hits+keyspace_misses)&#13;
+低缓存命中率可能由许多因素引起，包括数据到期和分配给Redis的内存不足（这可能导致key值被清除）。&#13;
+低命中率可能会导致应用程序延迟增加，因为它们必须从较慢的备用资源中获取数据</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[5s]平均延迟</name>
+                    <key>redis.pm[latency_avg]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>ms</units>
+                    <description>--intrinsic-latency 20</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[5s]最大延迟 执行items</name>
+                    <key>redis.pm[latency_max]</key>
+                    <delay>2m</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>microseconds</units>
+                    <description>--intrinsic-latency 20</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[5s]最大延迟</name>
+                    <key>redis.pm[latency_max_1]</key>
+                    <units>ms</units>
+                    <description>--intrinsic-latency 20</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[5s]检测耗时</name>
+                    <key>redis.pm[latency_run_time]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>ns</units>
+                    <description>--intrinsic-latency 20</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>最大客户端连接数配置</name>
+                    <key>redis.pm[maxclients]</key>
+                    <applications>
+                        <application>
+                            <name>基本活动指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>ping</name>
+                    <key>redis.pm[ping]</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>--intrinsic-latency 20</description>
+                    <applications>
+                        <application>
+                            <name>错误指标</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{regexp(PONG)}&lt;&gt;1</expression>
+                            <name>{HOST.IP}{HOST.NAME} redis ping failed</name>
+                            <priority>DISASTER</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>慢查询条目</name>
+                    <key>redis.pm[SLOWLOG]</key>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{diff(0)}&gt;0</expression>
+                            <name>{HOST.IP}{HOST.NAME} redis发生慢查询</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>total available memory 可读</name>
+                    <key>redis.pm[total_system_memory_human]</key>
+                    <value_type>FLOAT</value_type>
+                    <description>总内存</description>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[Utilization]已使用内存K</name>
+                    <key>redis.pm[used_memory_human]</key>
+                    <value_type>FLOAT</value_type>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>进程内存总数可读</name>
+                    <key>redis.pm[used_memory_rss_human ]</key>
+                    <value_type>FLOAT</value_type>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>阻塞的客户端列表</name>
+                    <key>redis_info[blocked_clients]</key>
+                    <description>由于BLPOP, BRPOP, or BRPOPLPUSH而备阻塞的客户端</description>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>SIMPLE_CHANGE</type>
+                            <params/>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <expression>{diff(0)}&gt;0</expression>
+                            <name>{HOST.IP}{HOST.NAME} redis 阻塞列表增加</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>客户端连接数</name>
+                    <key>redis_info[connected_clients]</key>
+                    <applications>
+                        <application>
+                            <name>基本活动指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Slave数量</name>
+                    <key>redis_info[connected_slaves]</key>
+                    <applications>
+                        <application>
+                            <name>基本活动指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[Saturation]由于最大内存限制被移除的key的数量</name>
+                    <key>redis_info[evicted_keys]</key>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>QPS</name>
+                    <key>redis_info[instantaneous_ops_per_sec]</key>
+                    <description>跟踪处理的命令吞吐量对于诊断Redis实例中的高延迟原因至关重要。&#13;
+高延迟可能是由许多问题引起的，从积压命令队列到慢速命令，再到网络过度使用。&#13;
+可以通过测量每秒处理的命令数来进行诊断 - 如果它相对比较平稳，则原因不是计算密集型命令（Redis本身引起的）。&#13;
+如果一个或多个慢速命令导致延迟问题，您将看到每秒的命令数量完全下降或停止。&#13;
+与历史基线相比，每秒处理的命令数量的下降可能是低命令量或阻塞系统的慢命令的标志。&#13;
+1．OPS较低可能是正常的，或者它可能表示上游存在问题（译者注：表示Redis本身被负载量较低）。</description>
+                    <applications>
+                        <application>
+                            <name>性能指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>Key值查找失败（没有命中）次数</name>
+                    <key>redis_info[keyspace_misses]</key>
+                    <description>每次Redis查找key时，只有两种可能的结果：key存在，或key不存在。&#13;
+查找不存在的键会导致keyspace_misses计数器递增，因此keyspace_misses意味着客户端尝试在数据库中查找不存在的密key。&#13;
+如果您不使用Redis作为缓存，则keyspace_misses应该为零或接近零。请注意，调用阻塞的任何阻塞操作（BLPOP，BRPOP和BRPOPLPUSH）都将导致keyspace_misses递增。</description>
+                    <applications>
+                        <application>
+                            <name>错误指标</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Redis bgsave time</name>
+                    </valuemap>
+                </item>
+                <item>
+                    <name>最近一次主从交互之后的秒数</name>
+                    <key>redis_info[master_last_io_seconds_ago]</key>
+                    <applications>
+                        <application>
+                            <name>基本活动指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>主从断开的持续时间（以秒为单位）</name>
+                    <key>redis_info[master_link_down_since_seconds]</key>
+                    <units>us</units>
+                    <description>该指标仅在主从之间的连接丢失时可用。&#13;
+理想情况下，此值不应超过零-主从之间保持持续通信，以确保slave不提供过时数据。&#13;
+应该解决连接之间的大的时间间隔。请记住，重新连接后，您的主Redis实例将需要投入资源来更新从站上的数据，这可能会导致延迟增加。</description>
+                    <applications>
+                        <application>
+                            <name>错误指标</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Redis bgsave time</name>
+                    </valuemap>
+                </item>
+                <item>
+                    <name>[Saturation]内存碎片率</name>
+                    <key>redis_info[mem_fragmentation_ratio]</key>
+                    <value_type>FLOAT</value_type>
+                    <description>mem_fragmentation_ratio度量标准给出了操作系统看到的内存与Redis分配的内存的比率。&#13;
+MemoryFragmentationRatio =Used_Memory_RSS（Used_Memory）&#13;
+操作系统负责为每个进程分配物理内存。操作系统的虚拟内存管理器处理由内存分配器调解的实际映射。&#13;
+如果Redis实例的内存占用为1GB，内存分配器将首先尝试找到一个连续内存段来存储数据。如果没有找到连续的段，分配器必须将进程的数据划分为多个段，从而导致内存开销的增加。&#13;
+跟踪碎片比率对于了解Redis实例的性能非常重要。&#13;
+碎裂率大于1表示发生碎片。比率超过1.5表示碎片过多，Redis实例占用了所请求的物理内存的150％。&#13;
+碎片率低于1会告诉您Redis需要的内存比系统上可用的内存多，这会导致交换。交换到磁盘将导致延迟显着增加（请参阅已用内存）。&#13;
+理想情况下，操作系统会在物理内存中分配一个连续的段，碎片比率等于1或稍大一些。&#13;
+1，如果您的服务器的碎片率高于1.5，则重新启动Redis实例将允许操作系统恢复以前因碎片而无法使用的内存。在这种情况下，作为通知的警报可能就足够了。&#13;
+2，如果Redis服务器的碎片比率低于1，则可能需要以发出告警，以便快速增加可用内存或减少内存使用量。&#13;
+从Redis 4开始，当Redis配置为使用包含的jemalloc副本时，可以使用新的活动碎片整理功能。&#13;
+可以将此工具配置为在碎片达到特定级别时启动，并开始将值复制到连续的内存区域并释放旧副本，从而减少服务器运行时的碎片。</description>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>自最后一次持久化以来数据库的更改数</name>
+                    <key>redis_info[rdb_changes_since_last_save]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>RPM</units>
+                    <applications>
+                        <application>
+                            <name>持久性指标</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Redis bgsave time</name>
+                    </valuemap>
+                </item>
+                <item>
+                    <name>最后一次持久化保存到磁盘的Unix时间戳</name>
+                    <key>redis_info[rdb_last_save_time]</key>
+                    <value_type>FLOAT</value_type>
+                    <units>RPM</units>
+                    <applications>
+                        <application>
+                            <name>持久性指标</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Redis bgsave time</name>
+                    </valuemap>
+                </item>
+                <item>
+                    <name>由于达到maxclient限制而被拒绝的连接数</name>
+                    <key>redis_info[rejected_connections]</key>
+                    <description>Redis能够处理许多活动连接，默认情况下可以使用10,000个客户端连接。&#13;
+可以通过更改redis.conf中的maxclient指令将最大连接数设置为不同的值。&#13;
+如果您的Redis实例当前处于其最大连接数，则将断开任何新的连接尝试。&#13;
+&#13;
+请注意，Redis可能不支持使用maxclient指令请求的连接数。&#13;
+Redis检查内核以确定可用文件描述符的数量。如果可用文件描述符的数量小于maxclient + 32（Redis为其自己使用保留32个文件描述符），则忽略maxclient指令并使用可用文件描述符的数量。&#13;
+有关Redis如何处理客户端连接的更多信息，请参阅有关redis.io的文档。</description>
+                    <applications>
+                        <application>
+                            <name>错误指标</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>Redis bgsave time</name>
+                    </valuemap>
+                </item>
+                <item>
+                    <name>total available memory</name>
+                    <key>redis_info[total_system_memory]</key>
+                    <description>总内存</description>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>[Utilization]已使用内存</name>
+                    <key>redis_info[used_memory]</key>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>进程内存总数</name>
+                    <key>redis_info[used_memory_rss]</key>
+                    <value_type>FLOAT</value_type>
+                    <applications>
+                        <application>
+                            <name>内存指标</name>
+                        </application>
+                    </applications>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>redis db discovery</name>
+                    <key>redis_db.discovery</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>redis:{#REDIS_DB}: avg_ttl</name>
+                            <key>redis.discovery.db.avg_ttl[{#REDIS_DB}]</key>
+                            <description>[{#REDIS_DB}]</description>
+                            <applications>
+                                <application>
+                                    <name>基本活动指标</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>redis:{#REDIS_DB}: expires</name>
+                            <key>redis.discovery.db.expires[{#REDIS_DB}]</key>
+                            <applications>
+                                <application>
+                                    <name>基本活动指标</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>redis:{#REDIS_DB}: keys</name>
+                            <key>redis.discovery.db.keys[{#REDIS_DB}]</key>
+                            <applications>
+                                <application>
+                                    <name>基本活动指标</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>redis-[{#REDIS_DB}: Keyspace]</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>1A7C11</color>
+                                    <item>
+                                        <host>redis info status</host>
+                                        <key>redis.discovery.db.avg_ttl[{#REDIS_DB}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>F63100</color>
+                                    <item>
+                                        <host>redis info status</host>
+                                        <key>redis.discovery.db.expires[{#REDIS_DB}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>2774A4</color>
+                                    <item>
+                                        <host>redis info status</host>
+                                        <key>redis.discovery.db.keys[{#REDIS_DB}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <screens>
+                <screen>
+                    <name>redis status</name>
+                    <hsize>3</hsize>
+                    <vsize>3</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[内存指标]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[基本活动指标]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>1</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[持久化指标]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>2</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[性能指标]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>0</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[错误指标]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>1</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                        <screen_item>
+                            <resourcetype>20</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>redis-[{#REDIS_DB}: Keyspace]</name>
+                                <host>redis info status</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>2</x>
+                            <y>1</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+            </screens>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <expression>{redis info status:redis_info[used_memory].last(3m)}&gt;{redis info status:redis_info[total_system_memory].last(3m)}</expression>
+            <name>{HOST.IP}{HOST.NAME} redis used_memory &gt; total available memory</name>
+            <priority>AVERAGE</priority>
+            <description>如果实例超过可用内存(used_memory &gt; total available memory)，操作系统将开始交换老的/未使用的部分内存(pages)，将该部分pages写入磁盘，为较新/活动页腾出内存空间。&#13;
+每个交换的部分都写入磁盘，严重影响性能。从磁盘写入或读取速度比写入或从存储器读取速度慢5个数量级（100,000）（内存为0.1μs，磁盘为10 ms）。&#13;
+可以将Redis配置为仅限于指定的内存量。在redis.conf文件中设置maxmemory指令可以直接控制Redis的内存使用情况。&#13;
+启用maxmemory需要您为Redis配置驱逐（过期）策略以确定它应如何释放内存。&#13;
+当Redis用作缓存时，这种“扁平线”模式很常见;消耗掉所有可用内存，并以与插入新数据相同的速率清理旧数据。</description>
+            <manual_close>YES</manual_close>
+        </trigger>
+        <trigger>
+            <expression>{redis info status:redis_info[used_memory].last(3m)}&gt;{redis info status:redis_info[used_memory_rss].last(3m)}</expression>
+            <name>{HOST.IP}{HOST.NAME}  redis 发生内存swap</name>
+            <status>DISABLED</status>
+            <priority>INFO</priority>
+            <description>used_memory &gt; used_memory_rss 意味着物理内存不足，发生了内存swap。</description>
+            <manual_close>YES</manual_close>
+        </trigger>
+        <trigger>
+            <expression>{redis info status:redis_info[used_memory].last(3m)}&lt;{redis info status:redis_info[used_memory_rss].last(3m)}</expression>
+            <name>{HOST.IP}{HOST.NAME} redis 可能存在内存碎片</name>
+            <status>DISABLED</status>
+            <priority>INFO</priority>
+            <description>used_memory being &lt; used_memory_rss意味着内存碎片的存在</description>
+            <manual_close>YES</manual_close>
+        </trigger>
+        <trigger>
+            <expression>{redis info status:redis_info[mem_fragmentation_ratio].last()}&gt;({redis info status:redis.pm[total_system_memory_human].last()}*0.5+{redis info status:redis.pm[total_system_memory_human].last()})</expression>
+            <name>{HOST.IP}{HOST.NAME} redis 碎片比率高于1.5</name>
+            <priority>HIGH</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+    </triggers>
+    <graphs>
+        <graph>
+            <name>redis-[内存指标]</name>
+            <graph_items>
+                <graph_item>
+                    <color>2774A4</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[used_memory]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>A54F10</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[mem_fragmentation_ratio]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>FC6EA3</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[evicted_keys]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[blocked_clients]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>redis-[基本活动指标]</name>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[connected_clients]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[connected_slaves]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[master_last_io_seconds_ago]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>redis-[性能指标]</name>
+            <graph_items>
+                <graph_item>
+                    <color>F63100</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis.pm[latency_avg]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis.pm[latency_max_1]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>AC8C14</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis.pm[latency_run_time]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>3</sortorder>
+                    <color>611F27</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[instantaneous_ops_per_sec]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>4</sortorder>
+                    <color>F230E0</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis.pm[HitRate]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>5</sortorder>
+                    <color>6C59DC</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis.pm[SLOWLOG]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>redis-[持久化指标]</name>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[rdb_last_save_time]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[rdb_changes_since_last_save]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <name>redis-[错误指标]</name>
+            <graph_items>
+                <graph_item>
+                    <color>1A7C11</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[rejected_connections]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[keyspace_misses]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <item>
+                        <host>redis info status</host>
+                        <key>redis_info[master_link_down_since_seconds]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+    <value_maps>
+        <value_map>
+            <name>Redis bgsave time</name>
+            <mappings>
+                <mapping>
+                    <value>- 1s</value>
+                    <newvalue>Inactive</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>

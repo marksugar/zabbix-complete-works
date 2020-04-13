@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-13T03:06:56Z</date>
+    <date>2020-04-13T08:41:26Z</date>
     <groups>
         <group>
             <name>Simple monitoring marksugar</name>
@@ -16,6 +16,21 @@
                     <name>Simple monitoring marksugar</name>
                 </group>
             </groups>
+            <items>
+                <item>
+                    <name>状态</name>
+                    <key>discovery.activemq.status</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <triggers>
+                        <trigger>
+                            <expression>{regexp(200)}&lt;&gt;1</expression>
+                            <name>{HOST.IP}:{HOST.NAME} ActiveMQ Status Not 200</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
             <discovery_rules>
                 <discovery_rule>
                     <name>discovery.activemq.queues</name>
