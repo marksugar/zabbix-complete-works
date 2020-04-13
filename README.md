@@ -418,7 +418,7 @@ curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/mast
 
 
 
-##ActiveMQ
+## ActiveMQ
 
 使用自动发现队列，监控队列的值。
 
