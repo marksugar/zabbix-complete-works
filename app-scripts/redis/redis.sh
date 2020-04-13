@@ -24,7 +24,7 @@ case $1 in
 # 开启：CONFIG SET latency-monitor-threshold 100
         #微秒microseconds
         latency_max)
-        result=`${REDIS_COMM} --intrinsic-latency 20 > /tmp/redis-intrinsic-latency && tail -4 /tmp/redis-intrinsic-latency | awk 'NR==1{print $5}'`
+        result=`${REDIS_COMM} --intrinsic-latency 5 > /tmp/redis-intrinsic-latency && tail -4 /tmp/redis-intrinsic-latency | awk 'NR==1{print $5}'`
         echo $result
         ;;
         #微秒microseconds

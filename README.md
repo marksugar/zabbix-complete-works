@@ -38,12 +38,13 @@
 
 ![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `应用监控`
 
-* [mariadb主从监控](#mariadb主从监控) 
-* [mariadb-galera](#mariadb-galera)
+* [MariaDB主从监控](#MariaDB主从监控) 
+* [MariaDB-Galera](#MariaDB-Galera)
 **mariadb监控分为主从监控，galera监控 ，和mariadb监控的性能监控，他们分别在不同的模板和两个脚本中**
 * [nginx和php-fpm](#nginx和php-fpm)
-* [redis](#redis)
-* [createdb](#createdb)
+* [Redis](#Redis)
+* [CrateDB](#CrateDB)
+* [ActiveMQ]()(#ActiveMQ)
 
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
@@ -282,7 +283,7 @@ UserParameter=tcp.httpd_established,awk 'NR>1' /tmp/httpNUB.txt|wc -l
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/tcp2.png)
 
-## mariadb主从监控
+## MariaDB主从监控
 
 如果你是主从结构，你需要导入Mariadb_M-S_Thread.xml模板，并且使用app-scripts中的IO_SQL.sh脚本配合使用。脚本内容如下：
 
@@ -331,7 +332,7 @@ echo "UserParameter=maria.IO_SQL[*],/etc/zabbix/scripts/IO_SQL.sh \$1" >> /etc/z
 
 当然，除此之外，想监控更多，你还要导入[Mariadb_monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/Mariadb_monitoring.xml)和调用app-scripts中的mariadb.sh脚本来监控其他的项目，比如innodb的情况等。
 
-## mariadb-galera
+## MariaDB-Galera
 
 这是一个非常简单的mariadb-galera-clster监控项目，它不适用于一般的主从结构。
 
@@ -348,7 +349,7 @@ echo "UserParameter=maria.db[*],/etc/zabbix/scripts/mariadb.sh \$1" >> /etc/zabb
 ```
 app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galera-cluster-monitor.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/mariadb-galera-cluster-monitor.xml)文件，如果你要更详细的信息，你仍然需要导入[Mariadb_monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/Mariadb_monitoring.xml)。而这些都调用app-scripts中的mariadb.sh
 
-## redis
+## Redis
 
 对于redis仅仅只是做了一些简单的监控，不包含主从或者集群。如下图：
 
@@ -356,7 +357,9 @@ app-scripts中的mariadb.sh作为脚本来调用，你需要导入[mariadb-galer
 
 ![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/redis/redisdb4.png)
 
-脚本在[app-scripts/redis](https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/redis)下，通过deploy-redis.sh进行部署，细节如下:
+脚本redis.sh在[app-scripts/redis](https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/redis)下，通过deploy-redis.sh进行部署，细节如下:
+
+> 需要注意：--intrinsic-latency 20 20是作为20秒进行探测的，可以修改更小
 
 ```
 read -p "输入redis密码:" repassword
@@ -370,18 +373,21 @@ sed -i "s/mima/$repassword/g" /etc/zabbix/scripts/redis.sh /etc/zabbix/scripts/r
 grep Timeout=30 /etc/zabbix/zabbix_agentd.conf || echo "Timeout=30" >> /etc/zabbix/zabbix_agentd.conf
 systemctl restart zabbix-agent.service
 ```
-
 快速部署如下：
 
 ```
-curl -Lks https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/deploy-redis.sh|bash
+bash <(curl -s https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/redis/deploy-redis.sh|more)
 ```
+- redis-cli安装：
 
-## cratedb
+```
+curl -Lk https://raw.githubusercontent.com/marksugar/Maops/master/redis-cli/install.sh|bash
+```
+## CrateDB
 
 createdb本身不对zabbix提取不友好，而对prometheus友好。我只是简单的做了集群的监控，我怀疑我的“增删改查”几个项有问题。暂且如此
 
-模板位于[app-templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下的[CrateDB Simple cluster monitoring.xml](https://github.com/marksugar/zabbix-complete-works/blob/master/app-templates/CrateDB Simple cluster monitoring.xml)
+模板位于[app-templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下的CrateDB Simple cluster monitoring.xml
 
 cratedb.conf如下：
 
@@ -408,5 +414,58 @@ UserParameter=CRATE_MANAGEMENT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"sel
 
 ```
 curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/cratedb/cratedb.conf -o /etc/zabbix/zabbix_agentd.d/cratedb.conf
+```
+
+##ActiveMQ
+
+使用自动发现队列，监控队列的值。
+
+通过url http://127.0.0.1:8161/admin/xml/queues.jsp抓取queue，获取值达到监控的目的
+
+![tcp1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/activemq/activemq1.png)
+
+发现队列[Queues_Name.py](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/activemq/Queues_Name.py)脚本存放在[app-scripts/activemq](https://github.com/marksugar/zabbix-complete-works/tree/master/app-scripts/activemq)下，模板[位置](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates/)名称activemq-queues-monitoring.xml。
+
+脚本如下：
+
+```
+#!/usr/bin/env python
+#-*- encoding: utf-8 -*-
+#########################################################################
+# File Name: Queues_Name.py
+# Author: www.linuxea.com
+# https://github.com/marksugar/zabbix-complete-works
+#########################################################################
+
+import os
+import json
+t=os.popen(""" curl -s -uadmin:admin http://127.0.0.1:8161/admin/queues.jsp | awk -F'<' '/<\/a><\/td>/{print $1}' """)
+QUEUES_NAME = []
+for dname in  t.readlines():
+		r = os.path.basename(dname.strip())
+		QUEUES_NAME  += [{'{#QUEUES_NAME}':r}]
+print json.dumps({'data':QUEUES_NAME},sort_keys=True,indent=4,separators=(',',':'))
+```
+
+activemq.conf
+
+```
+UserParameter=discovery.activemq.queues,/etc/zabbix/scripts/Queues_Name.py
+UserParameter=activemq.status[*],curl   -s -uadmin:admin  http://127.0.0.1:8161/admin/xml/queues.jsp |grep -v "^$"| grep  -A 5 """<queue name=\"$1\">"""|awk -F \"  '/$2/{print $$2}'
+```
+
+- 配置到ActiveMQ节点：
+
+```
+mkdir -p /etc/zabbix/scripts
+sed -i 's@#Include=/etc/zabbix/zabbix_agentd.d/*.conf@Include=/etc/zabbix/zabbix_agentd.d/*.conf@g' /etc/zabbix/zabbix_agentd.conf
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/activemq/activemq.conf -o /etc/zabbix/zabbix_agentd.d/activemq.conf
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/activemq/Queues_Name.py -o /etc/zabbix/scripts/Queues_Name.py
+```
+
+script:
+
+```
+curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/activemq/activemq_queues.sh |bash
 ```
 

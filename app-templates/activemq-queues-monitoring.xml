@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-04-13T03:06:56Z</date>
+    <groups>
+        <group>
+            <name>Simple monitoring marksugar</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>activemq queues monitoring</template>
+            <name>activemq queues monitoring</name>
+            <groups>
+                <group>
+                    <name>Simple monitoring marksugar</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>discovery.activemq.queues</name>
+                    <key>discovery.activemq.queues</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>ActiveMQ: Queues:[{#QUEUES_NAME}] consumerCount</name>
+                            <key>activemq.status[{#QUEUES_NAME},consumerCount]</key>
+                            <description>[{#Queues_Name}]</description>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>ActiveMQ: Queues:[{#QUEUES_NAME}] dequeueCount</name>
+                            <key>activemq.status[{#QUEUES_NAME},dequeueCount]</key>
+                            <description>[{#Queues_Name}]</description>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>ActiveMQ: Queues:[{#QUEUES_NAME}] enqueueCount</name>
+                            <key>activemq.status[{#QUEUES_NAME},enqueueCount]</key>
+                            <description>[{#Queues_Name}]</description>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>ActiveMQ: Queues:[{#QUEUES_NAME}] size</name>
+                            <key>activemq.status[{#QUEUES_NAME},size,,]</key>
+                            <description>[{#Queues_Name}]</description>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <name>ActiveMQ-Queues: [{#QUEUES_NAME}]</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>F63100</color>
+                                    <item>
+                                        <host>activemq queues monitoring</host>
+                                        <key>activemq.status[{#QUEUES_NAME},consumerCount]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>2774A4</color>
+                                    <item>
+                                        <host>activemq queues monitoring</host>
+                                        <key>activemq.status[{#QUEUES_NAME},dequeueCount]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>A54F10</color>
+                                    <item>
+                                        <host>activemq queues monitoring</host>
+                                        <key>activemq.status[{#QUEUES_NAME},enqueueCount]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>3</sortorder>
+                                    <color>FC6EA3</color>
+                                    <item>
+                                        <host>activemq queues monitoring</host>
+                                        <key>activemq.status[{#QUEUES_NAME},size,,]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <screens>
+                <screen>
+                    <name>ActiveMQ Queues</name>
+                    <hsize>1</hsize>
+                    <vsize>1</vsize>
+                    <screen_items>
+                        <screen_item>
+                            <resourcetype>20</resourcetype>
+                            <style>0</style>
+                            <resource>
+                                <name>ActiveMQ-Queues: [{#QUEUES_NAME}]</name>
+                                <host>activemq queues monitoring</host>
+                            </resource>
+                            <width>500</width>
+                            <height>100</height>
+                            <x>0</x>
+                            <y>0</y>
+                            <colspan>1</colspan>
+                            <rowspan>1</rowspan>
+                            <elements>0</elements>
+                            <valign>0</valign>
+                            <halign>0</halign>
+                            <dynamic>0</dynamic>
+                            <sort_triggers>0</sort_triggers>
+                            <url/>
+                            <application/>
+                            <max_columns>3</max_columns>
+                        </screen_item>
+                    </screen_items>
+                </screen>
+            </screens>
+        </template>
+    </templates>
+</zabbix_export>
