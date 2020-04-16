@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-13T08:41:26Z</date>
+    <date>2020-04-13T11:12:26Z</date>
     <groups>
         <group>
             <name>Simple monitoring marksugar</name>
@@ -35,6 +35,7 @@
                 <discovery_rule>
                     <name>discovery.activemq.queues</name>
                     <key>discovery.activemq.queues</key>
+                    <delay>5h</delay>
                     <item_prototypes>
                         <item_prototype>
                             <name>ActiveMQ: Queues:[{#QUEUES_NAME}] consumerCount</name>

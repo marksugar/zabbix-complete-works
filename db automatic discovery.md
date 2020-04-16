@@ -96,3 +96,22 @@ UserParameter=redis.discovery.db.expires[*],redis-cli -a mima info Keyspace| awk
 UserParameter=redis.discovery.db.avg_ttl[*],redis-cli -a mima info Keyspace| awk -F= '/$1/{print $$4}'
 ```
 
+## 多个参数
+
+那么如果有多个参数呢。以ActiveMQ为例。模板中的key如下
+
+```
+activemq.status[{#QUEUES_NAME},consumerCount]
+```
+
+`#QUEUES_NAME`作为发现Queues_name的参数,`consumerCount`作为实际传递的参数。这两个参数最终传递zabbix_agentd.d下的ActiveMQ.conf中。如下
+
+```
+UserParameter=discovery.activemq.queues,/etc/zabbix/scripts/Queues_Name.py
+UserParameter=activemq.status[*],curl   -s -uadmin:admin  http://127.0.0.1:8161/admin/xml/queues.jsp |grep -v "^$"| grep  -A 5 """<queue name=\"$1\">"""|awk -F \"  '/$2/{print $$2}'
+```
+
+- `activemq.status[*]`： *表示可以接收多个参数
+- `$1` : \$1就是`{#QUEUES_NAME}`的值
+- `$2`：\$2就是consumerCount
+- `$$2`： 如果不是传递参数，使用\$$，如: \$\$2

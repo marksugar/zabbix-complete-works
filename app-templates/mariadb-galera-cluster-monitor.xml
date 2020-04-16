@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-07T11:58:05Z</date>
+    <date>2020-04-13T11:11:55Z</date>
     <groups>
         <group>
             <name>Simple monitoring marksugar</name>
@@ -29,7 +29,7 @@
                         <trigger>
                             <expression>{last(1m)}&lt;&gt;3</expression>
                             <name>{HOST.NAME}  Mariadb Cluster chenage</name>
-                            <priority>HIGH</priority>
+                            <priority>DISASTER</priority>
                         </trigger>
                     </triggers>
                 </item>
@@ -46,7 +46,7 @@
                         <trigger>
                             <expression>{regexp(Primary)}&lt;&gt;1</expression>
                             <name>{HOST.NAME} cluster_status no-Primary</name>
-                            <priority>HIGH</priority>
+                            <priority>DISASTER</priority>
                         </trigger>
                     </triggers>
                 </item>
@@ -83,7 +83,7 @@
                         <trigger>
                             <expression>{regexp(ON)}&lt;&gt;1</expression>
                             <name>{HOST.NAME} Node is not ready</name>
-                            <priority>HIGH</priority>
+                            <priority>DISASTER</priority>
                         </trigger>
                     </triggers>
                 </item>

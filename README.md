@@ -22,7 +22,9 @@
 * [zabbix-server](#---server安装)
 * [自动发现](#---自动发现)
 
-如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章
+如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章。
+
+倘若你安装的是最新的(4.4)，我建议一些优化需要重新做，你可以参考[New beginning]((https://github.com/marksugar/zabbix-complete-works/blob/master/newbeginning.md))
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
@@ -36,6 +38,8 @@
 * [磁盘io](#磁盘io)
 * [tcp](#tcp)
 
+当你安装了Agent，以上包含在MySysOps_Templates模板中
+
 ![#4CFF33](https://placehold.it/15/4CFF33/000000?text=+) `应用监控`
 
 * [MariaDB主从监控](#MariaDB主从监控) 
@@ -46,6 +50,8 @@
 * [CrateDB](#CrateDB)
 * [ActiveMQ](#ActiveMQ)
 
+不要忘记，当你配置完成，你或许应该重启`systemctl restart zabbix-agent.service`
+
 ***[templates](https://github.com/marksugar/zabbix-complete-works/tree/master/app-templates)下载***
 
 ## -- **Agent安装**
@@ -53,12 +59,13 @@
 我在最新的agentd安装脚本中，使用的4.0版本，在这个脚本的包中包含如上的几种基础监控项目。
 
 ```
-curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local IPADDR |bash
+curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local ZABBIX_IPADDR 
 ```
 
-> 你需要指定server ip，`base  -s local IPADDR`
+> 你需要指定server ip，`base  -s local ZABBIX_IPADDR或者`-s net ZABBIX_IPADDR`
 
 *docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*。或者使用docker部署脚本
+
 - 注意：如果已经安装了docker，运行此脚本会删除，同时删除镜像
 ```
 curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/docker_init.sh|bash
@@ -68,7 +75,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/doc
 
 假如你是windows agent,你需要考虑[下载windows的zabbix_agent脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent_win/4.4.7/zabbix_agents_4.4.7_auto_installer.win.zip)，修改其中AutoInstall.bat脚本中的zabbix_server的环境变量并且使用超级管理运行,你可能需要[了解其细节部分](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/4.4.7/),关注其中的AutoInstall.bat即可。有问题你可以留言。
 
-另外，你可能还需要搭配[其模板](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/app-templates/)使用，如: sql server 2012
+另外，你可能还需要搭配[其模板](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/app-templates/)使用，如: `sql server 2012`
 
 ## -- **Server安装**
 
@@ -107,7 +114,9 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 
 ## -- **自动发现**
 
-自动发现参考[zabbix4.2的自动发现教程](https://github.com/marksugar/zabbix-complete-works/blob/master/discovery.md)
+自动发现节点参考[zabbix4.2的自动发现教程](https://github.com/marksugar/zabbix-complete-works/blob/master/discovery.md)
+
+半自动发现参考[redis自动发现db](https://github.com/marksugar/zabbix-complete-works/blob/master/db%20automatic%20discovery.md)
 
 ## authorized_keys
 
@@ -436,7 +445,21 @@ UserParameter=CRATE_MANAGEMENT,curl -sXPOST localhost:4200/_sql -d '{"stmt":"sel
 curl -LKs https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/app-scripts/cratedb/cratedb.conf -o /etc/zabbix/zabbix_agentd.d/cratedb.conf
 ```
 
+除了上的，你也可以通过
 
+查看集群
+
+```
+select health from sys.health order by severity desc limit 1;
+```
+
+查看未同步的信息
+
+```
+select * from sys.health order by severity desc, table_name;
+```
+
+这些信息在**[官网的页面](https://crate.io/docs/crate/reference/en/latest/admin/system-information.html#sys-operations-log-table-schema)**有解释，我只是简单做了集群的健康状态监控。
 
 ## ActiveMQ
 
