@@ -24,7 +24,7 @@
 
 如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章。
 
-倘若你安装的是最新的(4.4)，我建议一些优化需要重新做，你可以参考[New beginning]((https://github.com/marksugar/zabbix-complete-works/blob/master/newbeginning.md))
+倘若你安装的是最新的(4.4)，我建议一些优化需要重新做，你可以参考[Newbeginning](https://github.com/marksugar/zabbix-complete-works/blob/master/newbeginning.md)
 
 你至少要使用3.0以上的版本才能够更好的兼容使用。其中保留了一些好的用法，在我看来。这些当中包括：
 
@@ -62,7 +62,7 @@
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent/install-agentd.sh|bash -s local ZABBIX_IPADDR 
 ```
 
-> 你需要指定server ip，`base  -s local ZABBIX_IPADDR或者`-s net ZABBIX_IPADDR`
+> 你需要指定server ip，`base  -s local ZABBIX_IPADDR`或者`-s net ZABBIX_IPADDR`
 
 *docker和docker-compose安装参考-[docker官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/) And - docker-compose安装参考[docker-compose官网的安装方式](https://docs.docker.com/install/linux/docker-ce/centos/)*。或者使用docker部署脚本
 
@@ -73,7 +73,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/MySysOps/master/scripts/doc
 
 - windows agent
 
-假如你是windows agent,你需要考虑[下载windows的zabbix_agent脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent_win/4.4.7/zabbix_agents_4.4.7_auto_installer.win.zip)，修改其中AutoInstall.bat脚本中的zabbix_server的环境变量并且使用超级管理运行,你可能需要[了解其细节部分](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/4.4.7/),关注其中的AutoInstall.bat即可。有问题你可以留言。
+假如你是windows agent,你需要考虑[下载windows的zabbix_agent脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_agent_win/4.4.7/zabbix_agents_4.4.7_auto_installer.win.zip)，修改其中`AutoInstall.bat`脚本中的`zabbix_server`的环境变量并且使用超级管理运行,你可能需要[了解其细节部分](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/4.4.7/),关注其中的AutoInstall.bat即可。有问题你可以留言。
 
 另外，你可能还需要搭配[其模板](https://github.com/marksugar/zabbix-complete-works/tree/master/zabbix_agent_win/app-templates/)使用，如: `sql server 2012`
 
@@ -88,7 +88,7 @@ zabbix在2019的早些版本实验性[支持timescaledb](https://blog.zabbix.com
 
 - zabbix+timescaledb (推荐方式)。
 
-在我与zabbix官方的留言中，zabbix官网不建议使用zabbix+timescaledb+elasticsearch，任选其一即可。当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
+timescaledb作为存储elasticsearch也可以，不过在新版4.4中timescaledb已经支持zabbix_server。但是不支持zabbix_proxy。任选其一即可。
 
 正式部署zabbix+timescaledb：
 ```
@@ -111,6 +111,7 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_mysqldb_es.sh|bash
 ```
 
+当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
 
 ## -- **自动发现**
 
