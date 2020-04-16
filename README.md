@@ -20,6 +20,7 @@
 
 * [zabbix-agent](#---Agent安装)
 * [zabbix-server](#---server安装)
+  * [zabbix_server所需配置案例](# ***zabbix_server所需配置案例***)
 * [自动发现](#---自动发现)
 
 如果你对docker-compose中的参数有疑问可以参考[linuxea:Zabbix-complete-works之Zabbix基础安装配置](https://www.linuxea.com/2367.html)这篇文章。
@@ -88,7 +89,7 @@ zabbix在2019的早些版本实验性[支持timescaledb](https://blog.zabbix.com
 
 - zabbix+timescaledb (推荐方式)。
 
-timescaledb作为存储elasticsearch也可以，不过在新版4.4中timescaledb已经支持zabbix_server。但是不支持zabbix_proxy。任选其一即可。
+timescaledb和elasticsearch都可以存储大量数据，不过在新版4.4中timescaledb已经官方支持，但是不支持zabbix_proxy，仅仅支持zabbix_server。
 
 正式部署zabbix+timescaledb：
 ```
@@ -97,7 +98,6 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 部署细节见[describe.md](https://github.com/marksugar/zabbix-complete-works/blob/master/describe.md)，我在我的博客也做了说明[linuxea:zabbix4.2新功能之TimescaleDB数据源测试](https://www.linuxea.com/2385.html)
 
 这里还有一个[timewait优化脚本](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/zabbix-timewait.sh),你或许可以试试
-
 
 - zabbix+mysqldb+elasticsearch (适用于大规模)。
 
@@ -112,6 +112,31 @@ curl -Lk https://raw.githubusercontent.com/marksugar/zabbix-complete-works/maste
 ```
 
 当然，你仍然可以尝试测试使用[zabbix+timescaledb+elasticsearch](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/zabbix_server/zabbix-install/install_zabbix_timescaledb_es.sh)进行测试部署
+
+### ***zabbix_server所需配置案例***
+
+如果你使用了是timescaledb，在我当下配置中，zabbix_server describe如下:
+
+ 节点数      | items数     | triggers数     | 性能     | 配置     
+ -------- | :-----------:  | :-----------: | :-----------: | :-----------: 
+ 540   | 74360 | 28896 |1259.64|8C8G
+
+timescaledb如下：
+
+ 节点数      | items数     | triggers数     | 性能     | 配置     
+ -------- | :-----------:  | :-----------: | :-----------: | :-----------: 
+ 540   | 74360 | 28896 |1259.64|8C8G500G
+
+ 实际使用中：
+
+- zabbix-server  8核8G在具体表现中稳定在2核2G的使用
+
+- timescaledb   8核8G在具体表现中稳定在2核5G的使用
+
+  磁盘：在上述的体现中。400G磁盘37天使用300G
+
+![auth1](https://raw.githubusercontent.com/marksugar/zabbix-complete-works/master/img/zabbix/zabbix-data.png)
+
 
 ## -- **自动发现**
 
