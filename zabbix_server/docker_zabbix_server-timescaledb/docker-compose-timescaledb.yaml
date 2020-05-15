@@ -22,7 +22,7 @@ services:
 
         
   zabbix-server:
-    image: zabbix/zabbix-server-pgsql:alpine-4.4-latest
+    image: zabbix/zabbix-server-pgsql:alpine-4.4.7
     container_name: zabbix-server-pgsql
     restart: always
     network_mode: "host"
@@ -89,14 +89,13 @@ services:
      - net.ipv4.tcp_fin_timeout=30
      - net.ipv4.tcp_keepalive_time=1800
      - net.ipv4.tcp_tw_reuse=1
-     - net.ipv4.tcp_tw_recycle=1
      - net.core.somaxconn=65535
     logging:
       driver: "json-file"
       options:
         max-size: "128M"
   zabbix-web-nginx-pgsql:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-4.4-latest
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-4.4.7
     container_name: zabbix-web-nginx-pgsql
     restart: always
     network_mode: "host"
