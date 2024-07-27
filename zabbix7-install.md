@@ -35,7 +35,7 @@ Token： 创建机器获取的token
 
 获取个人chatid , open [userinfobot](https://t.me/userinfobot)
 
-![image-20240706170306605](img/image-20240706170306605.png)
+![image-20240706170306605](img/image-20240706170306606.png)
 
 - 群组chatid
 
