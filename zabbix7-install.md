@@ -16,11 +16,11 @@ you see [create-telegram-chatbot](https://sendpulse.com/knowledge-base/chatbot/t
 
 1,修改媒介
 
-![image-20240706165853931](E:\zabbix-complete-works\img\image-20240706165853931.png)
+![image-20240706165853931](img/image-20240706165853931.png)
 
 如下：
 
-![image-20240706170012134](E:\zabbix-complete-works\img\image-20240706170012134.png)
+![image-20240706170012134](img/image-20240706170012134.png)
 
 
 
@@ -35,7 +35,7 @@ Token： 创建机器获取的token
 
 获取个人chatid , open [userinfobot](https://t.me/userinfobot)
 
-![image-20240706170306605](E:\zabbix-complete-works\img\image-20240706170306605.png)
+![image-20240706170306605](img/image-20240706170306605.png)
 
 - 群组chatid
 
@@ -61,11 +61,11 @@ Token： 创建机器获取的token
 
 
 
-![image-20240706175308296](E:\zabbix-complete-works\img\image-20240706175308296.png)
+![image-20240706175308296](img/image-20240706175308296.png)
 
 
 
-![image-20240706175656208](E:\zabbix-complete-works\img\image-20240706175656208.png)
+![image-20240706175656208](img/image-20240706175656208.png)
 
 
 
