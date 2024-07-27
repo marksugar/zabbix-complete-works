@@ -1,0 +1,128 @@
+version: '3.5'
+services:
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:7.0-alpine-latest
+    container_name: zabbix-server-pgsql
+    restart: always
+    network_mode: "host"
+    ports:
+     - "10051:10051"
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
+#     - /data/zabbix7/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:rw
+     - /data/zabbix7/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+     - /data/zabbix7/zabbix/modules:/var/lib/zabbix/modules:ro
+     - /data/zabbix7/zabbix/enc:/var/lib/zabbix/enc
+     - /data/zabbix7/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+     - /data/zabbix7/zabbix/mibs:/var/lib/zabbix/mibs:ro
+     - /data/zabbix7/zabbix/snmptraps:/var/lib/zabbix/snmptraps:ro
+    environment:
+     - ENABLE_TIMESCALEDB=true
+     - DB_SERVER_HOST=172.25.200.1
+     - DB_SERVER_PORT=15432
+     - POSTGRES_DB=zabbix
+     - POSTGRES_USER=zabbix
+     - POSTGRES_PASSWORD=abc123
+     - DebugLevel=1
+     - HistoryStorageDateIndex=1
+
+     - ZBX_CACHESIZE=2048M
+     - ZBX_CACHEUPDATEFREQUENCY=60
+     - ZBX_STARTDBSYNCERS=4
+     - ZBX_HISTORYCACHESIZE=2048M
+     - ZBX_HISTORYINDEXCACHESIZE=2048M
+     - ZBX_TRENDCACHESIZE=2048M
+     - ZBX_VALUECACHESIZE=2048M
+     - ZBX_TRAPPERTIMEOUT=30
+     - ZBX_UNREACHABLEPERIOD=120
+     - ZBX_UNAVAILABLEDELAY=80
+     - ZBX_STARTTRAPPERS=20
+     - ZBX_STARTPOLLERS=10
+     - ZBX_STARTPOLLERSUNREACHABLE=10
+     - ZBX_STARTPINGERS=10
+     - ZBX_STARTDISCOVERERS=10
+     - ZBX_STARTHTTPPOLLERS=1
+     - ZBX_HOUSEKEEPINGFREQUENCY=1
+     - ZBX_MAXHOUSEKEEPERDELETE=100000
+    ulimits:
+     nproc: 65535
+     nofile:
+      soft: 20000
+      hard: 40000
+    deploy:
+     resources:
+      limits:
+        cpus: '7'
+        memory: 12288M
+      reservations:
+        cpus: '0.5'
+        memory: 512M
+    user: root
+    #sysctls:
+     #- net.ipv4.ip_local_port_range=1024 65000
+     #- net.ipv4.conf.all.accept_redirects=0
+     #- net.ipv4.conf.all.secure_redirects=0
+     #- net.ipv4.conf.all.send_redirects=0
+     #- net.ipv4.tcp_fin_timeout=30
+     #- net.ipv4.tcp_keepalive_time=1800
+     #- net.ipv4.tcp_tw_reuse=1
+     #- net.core.somaxconn=65535
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128M"
+  zabbix-web-nginx-pgsql:
+    image: zabbix/zabbix-web-nginx-pgsql:7.0-alpine-latest
+    container_name: zabbix-web-nginx-pgsql
+    restart: always
+    network_mode: "host"
+    ports:
+     - "8081:80"
+     - "8443:443"
+    environment:
+     - ENABLE_TIMESCALEDB=true
+     - DB_SERVER_HOST=172.25.200.1
+     - DB_SERVER_PORT=15432
+     - POSTGRES_DB=zabbix
+     - POSTGRES_USER=zabbix
+     - POSTGRES_PASSWORD=abc123
+     - ZBX_SERVER_HOST=127.0.0.1
+     - PHP_TZ="Asia/Shanghai"
+
+     - ZBX_POSTMAXSIZE=128M
+     - ZBX_UPLOADMAXFILESIZE=128M
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /etc/timezone:/etc/timezone:ro
+     - /data/zabbix7/zabbix/etc/passwd:/etc/nginx/passwd
+     - /data/zabbix7/zabbix/etc/nginx.conf:/etc/zabbix/nginx.conf
+     - /data/zabbix7/zabbix/ssl/:/etc/ssl/nginx:ro
+     - /data/zabbix7/zabbix/graphfont.ttf:/usr/share/zabbix/assets/fonts/DejaVuSans.ttf
+     - /data/zabbix7/zabbix/blue-theme.css:/usr/share/zabbix/assets/styles/blue-theme.css # logo base64 code
+     #- /data/zabbix7/zabbix/icon-sprite.svg:/usr/share/zabbix/assets/img/icon-sprite.svg
+     - /data/zabbix7/zabbix/php.ini:/etc/php83/php.ini # php timezone
+     - /data/zabbix7/wwwlogs:/data/wwwlogs
+    deploy:
+     resources:
+      limits:
+        cpus: '1'
+        memory: 1024M
+      reservations:
+        cpus: '0.5'
+        memory: 256M
+    user: root
+    depends_on:
+     - zabbix-server
+    healthcheck:
+     test: ["CMD", "curl", "-f", "http://localhost"]
+     interval: 10s
+     timeout: 5s
+     retries: 3
+     start_period: 30s
+    #sysctls:
+    # - net.core.somaxconn=65535
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128M"

@@ -1,0 +1,23 @@
+version: '3.5'
+services:
+  timescaledb_2:
+    image: timescale/timescaledb:2.14.2-pg16
+    container_name: timescaledb_2.14.2-pg16
+    restart: always
+    #network_mode: "host"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /data/zabbix/postgresql-2.14.2-pg16/data:/var/lib/postgresql/data:rw
+    user: root
+    stop_grace_period: 1m
+    environment:
+     - POSTGRES_USER=zabbix
+     - POSTGRES_PASSWORD=abc123
+     - TS_TUNE_MEMORY=7GB
+     - TS_TUNE_NUM_CPUS=7
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128M"
+    ports:
+      - "15432:5432"
